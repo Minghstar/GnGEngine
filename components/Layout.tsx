@@ -10,6 +10,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, title = 'GNG Engine - Australian College Athletes', description = 'Showcasing the best Australian college athletes and connecting them with opportunities.' }: LayoutProps) => {
+  const previewImage = '/favicon.ico'; // Placeholder, replace with real image if available
   return (
     <>
       <Head>
@@ -20,9 +21,11 @@ const Layout = ({ children, title = 'GNG Engine - Australian College Athletes', 
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content={previewImage} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={previewImage} />
       </Head>
       
       <div className="min-h-screen flex flex-col">

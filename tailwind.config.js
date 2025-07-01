@@ -8,9 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'aussie-green': '#00843D',
-        'gold': '#FFD700',
-        // Modern dark theme colors
+        'background': '#0F0F0F',
+        'accent': '#FFD700',
+        'green-highlight': '#006400',
+        'text': '#FFFFFF',
+        'text-secondary': '#B0B0B0',
         'dark': '#0F0F0F',
         'dark-gray': '#1A1A1A',
         'light-gray': '#2A2A2A',
@@ -18,8 +20,12 @@ module.exports = {
         'accent-rose': '#F43F5E',
       },
       fontFamily: {
+        'heading': ['Montserrat', 'Oswald', 'sans-serif'],
+        'body': ['Inter', 'Lato', 'sans-serif'],
         'inter': ['Inter', 'sans-serif'],
         'montserrat': ['Montserrat', 'sans-serif'],
+        'oswald': ['Oswald', 'sans-serif'],
+        'lato': ['Lato', 'sans-serif'],
         'space-grotesk': ['Space Grotesk', 'sans-serif'],
         'satoshi': ['Satoshi', 'sans-serif'],
       },
