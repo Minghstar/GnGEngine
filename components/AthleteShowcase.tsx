@@ -16,7 +16,7 @@ const dummyAthletes: Athlete[] = [
   },
   {
     id: '2',
-    name: 'Liam O'Connor',
+    name: "Liam O'Connor",
     sport: 'Swimming',
     year: 'Senior',
     hometown: 'Melbourne, VIC',
