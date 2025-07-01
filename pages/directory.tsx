@@ -16,7 +16,6 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
 
   const handleFilterChange = (filters: FilterState) => {
     let filtered = athletes;
-
     if (filters.sport) {
       filtered = filtered.filter(athlete => athlete.sport === filters.sport);
     }
@@ -29,7 +28,14 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
     if (filters.nationality) {
       filtered = filtered.filter(athlete => (athlete.nationality || 'Australian') === filters.nationality);
     }
-
+    if (filters.search) {
+      const search = filters.search.toLowerCase();
+      filtered = filtered.filter(
+        athlete =>
+          athlete.name.toLowerCase().includes(search) ||
+          (athlete.college && athlete.college.toLowerCase().includes(search))
+      );
+    }
     setFilteredAthletes(filtered);
   };
 
@@ -51,13 +57,13 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
       title="Athlete Directory - GNG Engine"
       description="Browse our comprehensive directory of Australian college athletes. Filter by sport, college, year, and nationality."
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-montserrat">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4 font-heading">
             Athlete Directory
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-text-secondary max-w-3xl mx-auto font-body">
             Discover talented Australian college athletes across all sports and universities. 
             Use the filters below to find exactly what you're looking for.
           </p>
@@ -67,11 +73,11 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
         <FilterBar athletes={athletes} onFilterChange={handleFilterChange} />
 
         {/* Refresh Button */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-end mb-6">
           <button
             onClick={refreshData}
             disabled={loading}
-            className="px-6 py-2 bg-aussie-green text-white rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="px-6 py-2 bg-accent text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center font-heading"
           >
             {loading ? (
               <>
@@ -94,9 +100,9 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
 
         {/* Results Count */}
         <div className="mb-6 text-center">
-          <p className="text-gray-600">
-            Showing <span className="font-semibold">{filteredAthletes.length}</span> of{' '}
-            <span className="font-semibold">{athletes.length}</span> athletes
+          <p className="text-text-secondary font-body">
+            Showing <span className="font-semibold text-charcoal">{filteredAthletes.length}</span> of{' '}
+            <span className="font-semibold text-charcoal">{athletes.length}</span> athletes
           </p>
         </div>
 
@@ -104,11 +110,11 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
         {loading && (
           <div className="flex justify-center items-center py-12">
             <div className="text-center">
-              <svg className="animate-spin h-12 w-12 text-aussie-green mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-12 w-12 text-accent mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <p className="text-lg text-gray-600">Loading athletes...</p>
+              <p className="text-lg text-text-secondary font-body">Loading athletes...</p>
             </div>
           </div>
         )}
@@ -116,22 +122,21 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
         {/* No Athletes Found */}
         {!loading && filteredAthletes.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Athletes Found</h3>
-            <p className="text-gray-600 mb-4">
+            <h3 className="text-xl font-semibold text-charcoal mb-2 font-heading">No Athletes Found</h3>
+            <p className="text-text-secondary mb-4 font-body">
               Try adjusting your filters or check back later for new athletes.
             </p>
             <button
               onClick={() => {
                 setFilteredAthletes(athletes);
-                // Reset filters by triggering a filter change with empty values
-                handleFilterChange({ sport: '', college: '', year: '', nationality: '' });
+                handleFilterChange({ sport: '', college: '', year: '', nationality: '', search: '' });
               }}
-              className="px-6 py-2 bg-aussie-green text-white rounded-md hover:bg-green-700 transition-colors"
+              className="px-6 py-2 bg-accent text-white rounded-md hover:bg-blue-700 transition-colors font-heading"
             >
               Clear All Filters
             </button>
@@ -140,7 +145,7 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
 
         {/* Athletes Grid */}
         {!loading && filteredAthletes.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredAthletes.map((athlete) => (
               <AthleteCard key={athlete.id} athlete={athlete} />
             ))}

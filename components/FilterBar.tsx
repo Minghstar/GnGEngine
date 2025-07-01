@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Athlete } from '../utils/airtable';
+import Input from './Input';
+import Select from './Select';
+import Button from './Button';
 
 interface FilterBarProps {
   athletes: Athlete[];
@@ -11,6 +14,7 @@ export interface FilterState {
   college: string;
   year: string;
   nationality: string;
+  search: string;
 }
 
 const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
@@ -19,6 +23,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
     college: '',
     year: '',
     nationality: '',
+    search: '',
   });
 
   const [uniqueValues, setUniqueValues] = useState({
@@ -33,13 +38,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
     const colleges = Array.from(new Set(athletes.map(a => a.college))).sort();
     const years = Array.from(new Set(athletes.map(a => a.year))).sort();
     const nationalities = Array.from(new Set(athletes.map(a => a.nationality || 'Australian'))).sort();
-
-    setUniqueValues({
-      sports,
-      colleges,
-      years,
-      nationalities,
-    });
+    setUniqueValues({ sports, colleges, years, nationalities });
   }, [athletes]);
 
   const handleFilterChange = (key: keyof FilterState, value: string) => {
@@ -54,105 +53,97 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
       college: '',
       year: '',
       nationality: '',
+      search: '',
     };
     setFilters(clearedFilters);
     onFilterChange(clearedFilters);
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 mb-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <h2 className="text-lg font-semibold text-gray-900">Filter Athletes</h2>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="bg-white shadow-md rounded-2xl p-6 mb-8">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
           {/* Sport Filter */}
           <div>
-            <label htmlFor="sport-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="sport-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
               Sport
             </label>
-            <select
+            <Select
               id="sport-filter"
               value={filters.sport}
-              onChange={(e) => handleFilterChange('sport', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-aussie-green focus:border-transparent"
+              onChange={e => handleFilterChange('sport', e.target.value)}
             >
               <option value="">All Sports</option>
-              {uniqueValues.sports.map((sport) => (
-                <option key={sport} value={sport}>
-                  {sport}
-                </option>
+              {uniqueValues.sports.map(sport => (
+                <option key={sport} value={sport}>{sport}</option>
               ))}
-            </select>
+            </Select>
           </div>
-
-          {/* College Filter */}
-          <div>
-            <label htmlFor="college-filter" className="block text-sm font-medium text-gray-700 mb-1">
-              College
-            </label>
-            <select
-              id="college-filter"
-              value={filters.college}
-              onChange={(e) => handleFilterChange('college', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-aussie-green focus:border-transparent"
-            >
-              <option value="">All Colleges</option>
-              {uniqueValues.colleges.map((college) => (
-                <option key={college} value={college}>
-                  {college}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Year Filter */}
-          <div>
-            <label htmlFor="year-filter" className="block text-sm font-medium text-gray-700 mb-1">
-              Year
-            </label>
-            <select
-              id="year-filter"
-              value={filters.year}
-              onChange={(e) => handleFilterChange('year', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-aussie-green focus:border-transparent"
-            >
-              <option value="">All Years</option>
-              {uniqueValues.years.map((year) => (
-                <option key={year} value={year}>
-                  Year {year}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Nationality Filter */}
           <div>
-            <label htmlFor="nationality-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="nationality-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
               Nationality
             </label>
-            <select
+            <Select
               id="nationality-filter"
               value={filters.nationality}
-              onChange={(e) => handleFilterChange('nationality', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-aussie-green focus:border-transparent"
+              onChange={e => handleFilterChange('nationality', e.target.value)}
             >
               <option value="">All Nationalities</option>
-              {uniqueValues.nationalities.map((nationality) => (
-                <option key={nationality} value={nationality}>
-                  {nationality}
-                </option>
+              {uniqueValues.nationalities.map(nationality => (
+                <option key={nationality} value={nationality}>{nationality}</option>
               ))}
-            </select>
+            </Select>
+          </div>
+          {/* Year Filter */}
+          <div>
+            <label htmlFor="year-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
+              Graduation Year
+            </label>
+            <Select
+              id="year-filter"
+              value={filters.year}
+              onChange={e => handleFilterChange('year', e.target.value)}
+            >
+              <option value="">All Years</option>
+              {uniqueValues.years.map(year => (
+                <option key={year} value={year}>Year {year}</option>
+              ))}
+            </Select>
+          </div>
+          {/* College Filter */}
+          <div>
+            <label htmlFor="college-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
+              College
+            </label>
+            <Select
+              id="college-filter"
+              value={filters.college}
+              onChange={e => handleFilterChange('college', e.target.value)}
+            >
+              <option value="">All Colleges</option>
+              {uniqueValues.colleges.map(college => (
+                <option key={college} value={college}>{college}</option>
+              ))}
+            </Select>
+          </div>
+          {/* Search Bar */}
+          <div>
+            <label htmlFor="search-bar" className="block text-xs font-medium text-text-main mb-1 font-heading">
+              Search
+            </label>
+            <Input
+              id="search-bar"
+              type="text"
+              placeholder="Name or College"
+              value={filters.search}
+              onChange={e => handleFilterChange('search', e.target.value)}
+            />
           </div>
         </div>
-
-        {/* Clear Filters Button */}
-        <button
-          onClick={clearFilters}
-          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm font-medium"
-        >
-          Clear Filters
-        </button>
+        <div className="flex flex-row gap-2 mt-2 lg:mt-0">
+          <Button variant="secondary" onClick={clearFilters} type="button">Clear Filters</Button>
+        </div>
       </div>
     </div>
   );

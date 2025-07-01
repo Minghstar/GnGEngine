@@ -4,10 +4,9 @@
 
 html,
 body {
+  @apply bg-charcoal-black text-text-white font-body;
   padding: 0;
   margin: 0;
-  background-color: #0F0F0F;
-  color: white;
 }
 
 a {
@@ -25,14 +24,14 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1A1A1A;
+  background: #2A2A2A;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2A2A;
+  background: #D7263D;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #38BDF8;
+  background: #0177FB;
 } 

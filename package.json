@@ -12,10 +12,13 @@
     "test-airtable": "node test-airtable.js"
   },
   "dependencies": {
+    "@fontsource/dm-sans": "^5.2.6",
     "@fontsource/inter": "^5.2.6",
     "@fontsource/lato": "^5.2.6",
     "@fontsource/montserrat": "^5.2.6",
     "@fontsource/oswald": "^5.2.6",
+    "@fontsource/outfit": "^5.2.6",
+    "@fontsource/space-grotesk": "^5.2.8",
     "axios": "^1.6.0",
     "dotenv": "^17.0.0",
     "lucide-react": "^0.525.0",

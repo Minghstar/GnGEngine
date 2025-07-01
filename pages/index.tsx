@@ -1,49 +1,41 @@
-import { GetStaticProps } from 'next';
 import Layout from '../components/Layout';
 import HeroSection from '../components/HeroSection';
-import WhatIsGNG from '../components/WhatIsGNG';
-import HowItWorks from '../components/HowItWorks';
-import AthleteShowcase from '../components/AthleteShowcase';
-import CTABanner from '../components/CTABanner';
-import Footer from '../components/Footer';
-import { fetchAthletes } from '../utils/airtable';
+import StatsBar from '../components/StatsBar';
+import HowItWorksSection from '../components/HowItWorksSection';
+import FeatureSection from '../components/FeatureSection';
+import FinalCTASection from '../components/FinalCTASection';
+import { CheckCircle } from 'lucide-react';
 
-interface HomeProps {
-  athleteCount: number;
-}
+export default function Home() {
+  const stats = [
+    { label: 'Athletes', value: '850+' },
+    { label: 'Colleges Tracked', value: '53' },
+    { label: 'Sports Covered', value: '2' },
+  ];
 
-export default function Home({ athleteCount }: HomeProps) {
+  const features = [
+    { icon: <CheckCircle className="w-6 h-6 text-accent-blue" />, label: 'Directory with advanced filters' },
+    { icon: <CheckCircle className="w-6 h-6 text-accent-blue" />, label: 'AI-powered scouting summaries' },
+    { icon: <CheckCircle className="w-6 h-6 text-accent-blue" />, label: 'Aussie-first athlete profiles' },
+    { icon: <CheckCircle className="w-6 h-6 text-accent-blue" />, label: 'Contact athletes directly (coming soon)' },
+  ];
+
   return (
-    <Layout 
-      title="GNG Engine - Home"
-      description="Discover Australia's rising athletes. Powered by AI. GNG Engine finds, verifies, and showcases Aussie talent in U.S. college sports."
-    >
-      <HeroSection athleteCount={athleteCount} />
-      <WhatIsGNG />
-      <HowItWorks />
-      <AthleteShowcase athleteCount={athleteCount} />
-      <CTABanner />
-      <Footer />
+    <Layout title="GNG Engine - Home" description="Discover Australia's rising athletes. Powered by AI. GNG Engine finds, verifies, and showcases Aussie talent in U.S. college sports.">
+      <HeroSection
+        headline="Discover Australia's Rising Athletes"
+        subtext="Powered by AI. GNG Engine finds, verifies, and showcases Aussie talent in U.S. college sports."
+        onPrimaryClick={() => window.location.href = '/directory'}
+        onSecondaryClick={() => window.location.href = '/submit'}
+      />
+      <div className="max-w-5xl mx-auto w-full px-4">
+        <StatsBar stats={stats} />
+      </div>
+      <HowItWorksSection />
+      <div className="max-w-5xl mx-auto w-full px-4">
+        <FeatureSection features={features} />
+      </div>
+      <FinalCTASection />
     </Layout>
   );
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const athletes = await fetchAthletes();
-    return {
-      props: {
-        athleteCount: athletes.length,
-      },
-      revalidate: 3600, // Revalidate every hour
-    };
-  } catch (error) {
-    console.error('Error fetching athletes for home page:', error);
-    return {
-      props: {
-        athleteCount: 0,
-      },
-      revalidate: 3600,
-    };
-  }
-}; 
+} 
