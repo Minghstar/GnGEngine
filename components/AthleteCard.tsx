@@ -71,7 +71,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         <div className="mt-auto pt-2">
           <Link href={`/profile/${athlete.id}`} legacyBehavior>
             <a>
-              <Button variant="primary" size="sm" className="w-full">View Profile</Button>
+              <Button variant="primary" className="w-full">View Profile</Button>
             </a>
           </Link>
         </div>
