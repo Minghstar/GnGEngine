@@ -46,6 +46,38 @@ export const getFallbackValue = (value: string | undefined | null, fallback: str
   return value;
 };
 
+export const getDisplayName = (name: string | undefined | null): string => {
+  return getFallbackValue(name, 'Unnamed Athlete');
+};
+
+export const getDisplayCollege = (college: string | undefined | null): string => {
+  return getFallbackValue(college, 'College Unknown');
+};
+
+export const getDisplayHometown = (hometown: string | undefined | null): string => {
+  return getFallbackValue(hometown, 'Hometown Unknown');
+};
+
+export const getDisplaySport = (sport: string | undefined | null): string => {
+  return getFallbackValue(sport, 'Sport Unknown');
+};
+
+export const getDisplayYear = (year: string | undefined | null): string => {
+  return getFallbackValue(year, 'Year Unknown');
+};
+
+export const isLowResImage = (imageUrl: string | undefined | null): boolean => {
+  if (!imageUrl) return false;
+  
+  // Check if URL contains common low-res indicators
+  const lowResIndicators = ['thumb', 'small', '150', '100', '50'];
+  return lowResIndicators.some(indicator => imageUrl.toLowerCase().includes(indicator));
+};
+
+export const shouldShowLowResBadge = (imageUrl: string | undefined | null): boolean => {
+  return isLowResImage(imageUrl);
+};
+
 export const getInitials = (name: string): string => {
   if (!name || name.trim() === '') {
     return '?';

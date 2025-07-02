@@ -1,7 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Athlete } from '../utils/airtable';
-import { validateAthlete, getFallbackValue, getInitials } from '../utils/athleteValidation';
+import { 
+  validateAthlete, 
+  getDisplayName, 
+  getDisplayCollege, 
+  getDisplayHometown, 
+  getDisplaySport, 
+  getDisplayYear, 
+  getFallbackValue,
+  getInitials,
+  shouldShowLowResBadge 
+} from '../utils/athleteValidation';
 import Button from './Button';
 
 interface AthleteCardProps {
@@ -18,6 +28,11 @@ function getFlagEmoji(nationality: string) {
 }
 
 const AthleteCard = ({ athlete }: AthleteCardProps) => {
+  // Conditional rendering logic - don't render if missing critical data
+  if (!athlete.name && !athlete.image) {
+    return null;
+  }
+  
   // Validate athlete data
   const validatedAthlete = validateAthlete(athlete);
   
@@ -26,21 +41,24 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
     return null;
   }
   
-  // Get fallback values for missing data
-  const displayName = getFallbackValue(athlete.name, 'Unnamed Athlete');
-  const displayCollege = getFallbackValue(athlete.college, 'Unknown College');
-  const displaySport = getFallbackValue(athlete.sport, 'Unknown Sport');
-  const displayYear = getFallbackValue(athlete.year, 'Unknown Year');
-  const displayHometown = getFallbackValue(athlete.hometown, 'Unknown Location');
+  // Get fallback values for missing data with improved messaging
+  const displayName = getDisplayName(athlete.name);
+  const displayCollege = getDisplayCollege(athlete.college);
+  const displaySport = getDisplaySport(athlete.sport);
+  const displayYear = getDisplayYear(athlete.year);
+  const displayHometown = getDisplayHometown(athlete.hometown);
   const displayNationality = getFallbackValue(athlete.nationality, 'Australian');
   
   // Get initials for fallback avatar
   const initials = getInitials(displayName);
   
+  // Check if image is low resolution
+  const showLowResBadge = shouldShowLowResBadge(athlete.image);
+  
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-light-gray">
-      {/* Image Section - Fixed aspect ratio */}
-      <div className="relative w-full h-64 bg-background">
+      {/* Image Section - Fixed aspect ratio with max dimensions */}
+      <div className="relative w-full h-64 bg-background max-w-[250px] max-h-[250px] mx-auto">
         {athlete.image ? (
           <Image
             src={athlete.image}
@@ -82,6 +100,15 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
             {displaySport}
           </span>
         </div>
+        
+        {/* Low Res Badge */}
+        {showLowResBadge && (
+          <div className="absolute bottom-3 left-3">
+            <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold font-heading shadow">
+              Low Res
+            </span>
+          </div>
+        )}
       </div>
       
       {/* Content Section */}

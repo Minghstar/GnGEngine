@@ -10,7 +10,17 @@ import ShareButtons from '../../components/ShareButtons';
 import ClaimProfileModal from '../../components/ClaimProfileModal';
 import ViewCounter from '../../components/ViewCounter';
 import { fetchAthletes, fetchAthleteById, Athlete } from '../../utils/airtable';
-import { validateAthlete, getFallbackValue, getInitials } from '../../utils/athleteValidation';
+import { 
+  validateAthlete, 
+  getDisplayName, 
+  getDisplayCollege, 
+  getDisplayHometown, 
+  getDisplaySport, 
+  getDisplayYear, 
+  getFallbackValue,
+  getInitials,
+  shouldShowLowResBadge 
+} from '../../utils/athleteValidation';
 
 interface ProfileProps {
   athlete: Athlete | null;
@@ -71,17 +81,20 @@ export default function Profile({ athlete }: ProfileProps) {
   // Validate athlete data
   const validatedAthlete = validateAthlete(athlete);
   
-  // Get fallback values for missing data
-  const displayName = getFallbackValue(athlete.name, 'Unnamed Athlete');
-  const displayCollege = getFallbackValue(athlete.college, 'Unknown College');
-  const displaySport = getFallbackValue(athlete.sport, 'Unknown Sport');
-  const displayYear = getFallbackValue(athlete.year, 'Unknown Year');
-  const displayHometown = getFallbackValue(athlete.hometown, 'Unknown Location');
+  // Get fallback values for missing data with improved messaging
+  const displayName = getDisplayName(athlete.name);
+  const displayCollege = getDisplayCollege(athlete.college);
+  const displaySport = getDisplaySport(athlete.sport);
+  const displayYear = getDisplayYear(athlete.year);
+  const displayHometown = getDisplayHometown(athlete.hometown);
   const displayNationality = getFallbackValue(athlete.nationality, 'Australian');
   const displayHighSchool = athlete.highSchool ? athlete.highSchool : null;
   
   // Get initials for fallback avatar
   const initials = getInitials(displayName);
+  
+  // Check if image is low resolution
+  const showLowResBadge = shouldShowLowResBadge(athlete.image);
 
   return (
     <Layout 
@@ -103,7 +116,7 @@ export default function Profile({ athlete }: ProfileProps) {
         <Card className="mb-8 p-0 overflow-hidden">
           <div className="flex flex-col md:flex-row">
             {/* Image Section */}
-            <div className="md:w-1/3 flex items-center justify-center bg-background relative min-h-[260px]">
+            <div className="md:w-1/3 flex items-center justify-center bg-background relative min-h-[260px] max-w-[250px] max-h-[250px]">
               {athlete.image ? (
                 <Image
                   src={athlete.image}
@@ -137,6 +150,15 @@ export default function Profile({ athlete }: ProfileProps) {
                   {initials}
                 </div>
               </div>
+              
+              {/* Low Res Badge */}
+              {showLowResBadge && (
+                <div className="absolute bottom-3 left-3">
+                  <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold font-heading shadow">
+                    Low Res
+                  </span>
+                </div>
+              )}
             </div>
             {/* Info Section */}
             <div className="md:w-2/3 p-6 flex flex-col gap-4">
@@ -181,11 +203,17 @@ export default function Profile({ athlete }: ProfileProps) {
           <h2 className="text-2xl font-bold text-charcoal mb-4 font-heading">
             About {displayName}
           </h2>
-          <p className="text-text-secondary leading-relaxed font-body">
-            {displayName} is a talented {displaySport} athlete currently studying at {displayCollege}. 
-            Originally from {displayHometown}, they are in their {displayYear} year of study.
-            {displayHighSchool && ` They previously attended ${displayHighSchool}.`}
-          </p>
+          {displayName !== 'Unnamed Athlete' && displayCollege !== 'College Unknown' ? (
+            <p className="text-text-secondary leading-relaxed font-body">
+              {displayName} is a talented {displaySport} athlete currently studying at {displayCollege}. 
+              {displayHometown !== 'Hometown Unknown' && ` Originally from ${displayHometown},`} they are in their {displayYear} year of study.
+              {displayHighSchool && ` They previously attended ${displayHighSchool}.`}
+            </p>
+          ) : (
+            <p className="text-text-secondary leading-relaxed font-body italic">
+              No bio information available.
+            </p>
+          )}
           {/* Future: Add stats, achievements, highlights here */}
           
           {/* View Counter */}
