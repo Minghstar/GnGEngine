@@ -8,6 +8,7 @@ import Card from '../../components/Card';
 import Button from '../../components/Button';
 import ShareButtons from '../../components/ShareButtons';
 import ClaimProfileModal from '../../components/ClaimProfileModal';
+import ViewCounter from '../../components/ViewCounter';
 import { fetchAthletes, fetchAthleteById, Athlete } from '../../utils/airtable';
 
 interface ProfileProps {
@@ -155,6 +156,11 @@ export default function Profile({ athlete }: ProfileProps) {
             {athlete.highSchool && ` They previously attended ${athlete.highSchool}.`}
           </p>
           {/* Future: Add stats, achievements, highlights here */}
+          
+          {/* View Counter */}
+          <div className="mt-6 pt-4 border-t border-neutral-gray">
+            <ViewCounter athleteId={athlete.id} />
+          </div>
         </Card>
 
         {/* Share Section */}

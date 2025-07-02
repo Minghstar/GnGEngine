@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { GetStaticProps } from 'next';
 import Layout from '../components/Layout';
 import FilterBar, { FilterState } from '../components/FilterBar';
+import SearchBar from '../components/SearchBar';
 import AthleteCard from '../components/AthleteCard';
 import { fetchAthletes, Athlete } from '../utils/airtable';
 
@@ -13,9 +14,27 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
   const [athletes, setAthletes] = useState<Athlete[]>(initialAthletes);
   const [filteredAthletes, setFilteredAthletes] = useState<Athlete[]>(initialAthletes);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+  }, []);
 
   const handleFilterChange = (filters: FilterState) => {
     let filtered = athletes;
+    
+    // Apply search filter
+    if (searchQuery) {
+      const search = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        athlete =>
+          athlete.name.toLowerCase().includes(search) ||
+          athlete.college.toLowerCase().includes(search) ||
+          athlete.hometown.toLowerCase().includes(search)
+      );
+    }
+    
+    // Apply other filters
     if (filters.sport) {
       filtered = filtered.filter(athlete => athlete.sport === filters.sport);
     }
@@ -67,6 +86,11 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
             Discover talented Australian college athletes across all sports and universities. 
             Use the filters below to find exactly what you're looking for.
           </p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-8">
+          <SearchBar onSearch={handleSearch} />
         </div>
 
         {/* Filter Bar */}

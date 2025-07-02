@@ -1,12 +1,19 @@
+import { GetStaticProps } from 'next';
 import Layout from '../components/Layout';
 import HeroSection from '../components/HeroSection';
 import StatsBar from '../components/StatsBar';
 import HowItWorksSection from '../components/HowItWorksSection';
 import FeatureSection from '../components/FeatureSection';
 import FinalCTASection from '../components/FinalCTASection';
+import RecentlyAddedAthletes from '../components/RecentlyAddedAthletes';
 import { CheckCircle } from 'lucide-react';
+import { fetchAthletes, Athlete } from '../utils/airtable';
 
-export default function Home() {
+interface HomeProps {
+  athletes: Athlete[];
+}
+
+export default function Home({ athletes }: HomeProps) {
   const stats = [
     { label: 'Athletes', value: '850+' },
     { label: 'Colleges Tracked', value: '53' },
@@ -31,6 +38,7 @@ export default function Home() {
       <div className="max-w-5xl mx-auto w-full px-4">
         <StatsBar stats={stats} />
       </div>
+      <RecentlyAddedAthletes athletes={athletes} />
       <HowItWorksSection />
       <div className="max-w-5xl mx-auto w-full px-4">
         <FeatureSection features={features} />
@@ -38,4 +46,24 @@ export default function Home() {
       <FinalCTASection />
     </Layout>
   );
-} 
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const athletes = await fetchAthletes();
+    return {
+      props: {
+        athletes,
+      },
+      revalidate: 3600, // Revalidate every hour
+    };
+  } catch (error) {
+    console.error('Error fetching athletes for homepage:', error);
+    return {
+      props: {
+        athletes: [],
+      },
+      revalidate: 3600,
+    };
+  }
+}; 
