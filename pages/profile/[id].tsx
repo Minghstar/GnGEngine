@@ -10,6 +10,7 @@ import ShareButtons from '../../components/ShareButtons';
 import ClaimProfileModal from '../../components/ClaimProfileModal';
 import ViewCounter from '../../components/ViewCounter';
 import { fetchAthletes, fetchAthleteById, Athlete } from '../../utils/airtable';
+import { validateAthlete, getFallbackValue, getInitials } from '../../utils/athleteValidation';
 
 interface ProfileProps {
   athlete: Athlete | null;
@@ -67,10 +68,25 @@ export default function Profile({ athlete }: ProfileProps) {
     );
   }
 
+  // Validate athlete data
+  const validatedAthlete = validateAthlete(athlete);
+  
+  // Get fallback values for missing data
+  const displayName = getFallbackValue(athlete.name, 'Unnamed Athlete');
+  const displayCollege = getFallbackValue(athlete.college, 'Unknown College');
+  const displaySport = getFallbackValue(athlete.sport, 'Unknown Sport');
+  const displayYear = getFallbackValue(athlete.year, 'Unknown Year');
+  const displayHometown = getFallbackValue(athlete.hometown, 'Unknown Location');
+  const displayNationality = getFallbackValue(athlete.nationality, 'Australian');
+  const displayHighSchool = athlete.highSchool ? athlete.highSchool : null;
+  
+  // Get initials for fallback avatar
+  const initials = getInitials(displayName);
+
   return (
     <Layout 
-      title={`${athlete.name} - ${athlete.sport} - GNG Engine`}
-      description={`Learn more about ${athlete.name}, a ${athlete.sport} athlete from ${athlete.college}. View their profile, achievements, and background.`}
+      title={`${displayName} - ${displaySport} - GNG Engine`}
+      description={`Learn more about ${displayName}, a ${displaySport} athlete from ${displayCollege}. View their profile, achievements, and background.`}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Back Button */}
@@ -91,44 +107,59 @@ export default function Profile({ athlete }: ProfileProps) {
               {athlete.image ? (
                 <Image
                   src={athlete.image}
-                  alt={`${athlete.name} - ${athlete.sport}`}
+                  alt={`${displayName} - ${displaySport} athlete`}
                   fill
                   className="object-cover rounded-l-2xl md:rounded-none md:rounded-l-2xl"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   quality={90}
                   placeholder="blur"
                   blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                  onError={(e) => {
+                    // Fallback to initials if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      const fallbackDiv = parent.querySelector('.profile-fallback-avatar') as HTMLElement;
+                      if (fallbackDiv) {
+                        fallbackDiv.style.display = 'flex';
+                      }
+                    }
+                  }}
                 />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-red to-accent-blue">
-                  <div className="text-white text-6xl font-bold font-heading">
-                    {athlete.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                  </div>
+              ) : null}
+              
+              {/* Fallback Avatar - Always present but hidden when image loads */}
+              <div 
+                className={`profile-fallback-avatar w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-red to-accent-blue ${athlete.image ? 'hidden' : ''}`}
+              >
+                <div className="text-white text-6xl font-bold font-heading">
+                  {initials}
                 </div>
-              )}
+              </div>
             </div>
             {/* Info Section */}
             <div className="md:w-2/3 p-6 flex flex-col gap-4">
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <span className="bg-primary-red text-text-white px-3 py-1 rounded-full text-sm font-heading font-bold">
-                  {athlete.sport}
+                  {displaySport}
                 </span>
                 <span className="flex items-center gap-1 text-lg font-heading text-charcoal">
-                  {getFlagEmoji(athlete.nationality || 'Australian')}
-                  <span className="text-base text-neutral-gray">{athlete.nationality || 'Australian'}</span>
+                  {getFlagEmoji(displayNationality)}
+                  <span className="text-base text-neutral-gray">{displayNationality}</span>
                 </span>
                 <span className="bg-charcoal-black text-text-white px-3 py-1 rounded-full text-xs font-heading">
-                  Year {athlete.year}
+                  Year {displayYear}
                 </span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-charcoal font-heading mb-2">
-                {athlete.name}
+                {displayName}
               </h1>
               <div className="space-y-2 font-body text-base text-text-secondary">
-                <div><span className="font-bold text-charcoal">College:</span> {athlete.college}</div>
-                <div><span className="font-bold text-charcoal">Hometown:</span> {athlete.hometown}</div>
-                {athlete.highSchool && (
-                  <div><span className="font-bold text-charcoal">High School:</span> {athlete.highSchool}</div>
+                <div><span className="font-bold text-charcoal">College:</span> {displayCollege}</div>
+                <div><span className="font-bold text-charcoal">Hometown:</span> {displayHometown}</div>
+                {displayHighSchool && (
+                  <div><span className="font-bold text-charcoal">High School:</span> {displayHighSchool}</div>
                 )}
               </div>
               <div className="mt-4 space-y-3">
@@ -148,12 +179,12 @@ export default function Profile({ athlete }: ProfileProps) {
         {/* About Section */}
         <Card>
           <h2 className="text-2xl font-bold text-charcoal mb-4 font-heading">
-            About {athlete.name}
+            About {displayName}
           </h2>
           <p className="text-text-secondary leading-relaxed font-body">
-            {athlete.name} is a talented {athlete.sport} athlete currently studying at {athlete.college}. 
-            Originally from {athlete.hometown}, they are in their {athlete.year} year of study.
-            {athlete.highSchool && ` They previously attended ${athlete.highSchool}.`}
+            {displayName} is a talented {displaySport} athlete currently studying at {displayCollege}. 
+            Originally from {displayHometown}, they are in their {displayYear} year of study.
+            {displayHighSchool && ` They previously attended ${displayHighSchool}.`}
           </p>
           {/* Future: Add stats, achievements, highlights here */}
           
@@ -167,8 +198,8 @@ export default function Profile({ athlete }: ProfileProps) {
         <Card>
           <ShareButtons 
             url={typeof window !== 'undefined' ? window.location.href : ''}
-            title={`${athlete.name} - ${athlete.sport} Athlete`}
-            description={`Check out ${athlete.name}, a ${athlete.sport} athlete from ${athlete.college}`}
+            title={`${displayName} - ${displaySport} Athlete`}
+            description={`Check out ${displayName}, a ${displaySport} athlete from ${displayCollege}`}
           />
         </Card>
 
@@ -176,7 +207,7 @@ export default function Profile({ athlete }: ProfileProps) {
         <ClaimProfileModal
           isOpen={isClaimModalOpen}
           onClose={() => setIsClaimModalOpen(false)}
-          athleteName={athlete.name}
+          athleteName={displayName}
         />
       </div>
     </Layout>
