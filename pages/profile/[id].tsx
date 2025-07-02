@@ -2,9 +2,12 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
+import ShareButtons from '../../components/ShareButtons';
+import ClaimProfileModal from '../../components/ClaimProfileModal';
 import { fetchAthletes, fetchAthleteById, Athlete } from '../../utils/airtable';
 
 interface ProfileProps {
@@ -22,6 +25,7 @@ function getFlagEmoji(nationality: string) {
 
 export default function Profile({ athlete }: ProfileProps) {
   const router = useRouter();
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
 
   if (router.isFallback) {
     return (
@@ -123,8 +127,15 @@ export default function Profile({ athlete }: ProfileProps) {
                   <div><span className="font-bold text-charcoal">High School:</span> {athlete.highSchool}</div>
                 )}
               </div>
-              <div className="mt-4">
+              <div className="mt-4 space-y-3">
                 <Button variant="primary" className="w-full md:w-auto">Scout This Athlete</Button>
+                <Button 
+                  variant="secondary" 
+                  className="w-full md:w-auto"
+                  onClick={() => setIsClaimModalOpen(true)}
+                >
+                  Is this you? Claim Profile
+                </Button>
               </div>
             </div>
           </div>
@@ -142,6 +153,22 @@ export default function Profile({ athlete }: ProfileProps) {
           </p>
           {/* Future: Add stats, achievements, highlights here */}
         </Card>
+
+        {/* Share Section */}
+        <Card>
+          <ShareButtons 
+            url={typeof window !== 'undefined' ? window.location.href : ''}
+            title={`${athlete.name} - ${athlete.sport} Athlete`}
+            description={`Check out ${athlete.name}, a ${athlete.sport} athlete from ${athlete.college}`}
+          />
+        </Card>
+
+        {/* Claim Profile Modal */}
+        <ClaimProfileModal
+          isOpen={isClaimModalOpen}
+          onClose={() => setIsClaimModalOpen(false)}
+          athleteName={athlete.name}
+        />
       </div>
     </Layout>
   );
