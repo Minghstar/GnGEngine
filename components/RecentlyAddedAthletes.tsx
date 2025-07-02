@@ -23,10 +23,10 @@ const RecentlyAddedAthletes: React.FC<RecentlyAddedAthletesProps> = ({ athletes 
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 font-heading">
-            Recently Added Athletes
+            Fresh Faces, Fierce Dreams
           </h2>
           <p className="text-lg text-text-secondary max-w-2xl mx-auto font-body">
-            Meet the latest Australian athletes joining GNG Engine. Discover fresh talent from across the country.
+            Six more dreamers just crossed the Pacific. Here's where their stories begin.
           </p>
         </div>
 

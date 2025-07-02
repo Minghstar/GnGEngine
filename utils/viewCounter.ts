@@ -61,7 +61,7 @@ export const incrementViewCount = (athleteId: string): number => {
 };
 
 export const formatViewCount = (count: number): string => {
-  if (count === 0) return 'No views yet';
-  if (count === 1) return 'Viewed 1 time';
-  return `Viewed ${count} times`;
+  if (count === 0) return 'No scouts yet';
+  if (count === 1) return '1 scout checking in';
+  return `${count} scouts checking in`;
 }; 
