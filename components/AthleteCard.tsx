@@ -56,7 +56,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
   const showLowResBadge = shouldShowLowResBadge(athlete.image);
   
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-light-gray">
+    <div className="bg-charcoal-black rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-neutral-gray">
       {/* Image Section - Fixed aspect ratio with max dimensions */}
       <div className="relative w-full h-64 bg-background max-w-[250px] max-h-[250px] mx-auto">
         {athlete.image ? (
@@ -96,7 +96,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         
         {/* Sport Badge */}
         <div className="absolute top-3 right-3">
-          <span className="bg-accent text-background px-3 py-1 rounded-full text-xs font-bold font-heading shadow">
+          <span className="bg-accent-blue text-text-white px-3 py-1 rounded-full text-xs font-bold font-heading shadow">
             {displaySport}
           </span>
         </div>
@@ -114,7 +114,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
       {/* Content Section */}
       <div className="flex flex-col flex-1 p-4 gap-2">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-bold text-charcoal font-heading flex-1 truncate">
+          <h3 className="text-lg font-bold text-text-white font-heading flex-1 truncate">
             {displayName}
           </h3>
           <span className="text-xl" title={displayNationality}>
@@ -122,17 +122,17 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           </span>
         </div>
         
-        <div className="space-y-1 text-sm text-text-secondary font-body mb-2">
+        <div className="space-y-1 text-sm text-neutral-gray font-body mb-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-green-highlight rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-primary-red rounded-full"></span>
             <span className="truncate">{displayCollege}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-accent rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-accent-blue rounded-full"></span>
             <span>Year {displayYear}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-green-highlight rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-primary-red rounded-full"></span>
             <span className="truncate">{displayHometown}</span>
           </div>
         </div>
