@@ -76,10 +76,10 @@ export default function Profile({ athlete }: ProfileProps) {
   // Define ownership and verification logic
   const userIsOwner = 
     user?.publicMetadata?.role === "athlete" &&
-    athlete.claimedStatus === "Claimed" &&
-    user?.primaryEmailAddress?.emailAddress === athlete.claimedByEmail;
+    athlete?.claimedStatus === "Claimed" &&
+    user?.primaryEmailAddress?.emailAddress === athlete?.claimedByEmail;
 
-  const isVerified = athlete.verifiedStatus === "Verified";
+  const isVerified = athlete?.verifiedStatus === "Verified";
 
   if (router.isFallback) {
     return (
