@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAuth } from '@clerk/nextjs/server';
-import { clerkClient } from '@clerk/nextjs/server';
+import { getAuth, clerkClient } from '@clerk/nextjs/server';
 import { fetchAthleteById } from '../../../utils/airtable';
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_PAT || process.env.AIRTABLE_TOKEN;
@@ -28,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Get user details from Clerk
-    const user = await clerkClient.users.getUser(userId);
+    const user = await clerkClient().users.getUser(userId);
     const userEmail = user.primaryEmailAddress?.emailAddress;
 
     // Check if user is the owner

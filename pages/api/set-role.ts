@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAuth } from '@clerk/nextjs/server';
-import { clerkClient } from '@clerk/nextjs/server';
+import { getAuth, clerkClient } from '@clerk/nextjs/server';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -17,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Invalid role' });
   }
   try {
-    await clerkClient.users.updateUser(userId, {
+    await clerkClient().users.updateUser(userId, {
       publicMetadata: { role }
     });
     return res.status(200).json({ success: true });
