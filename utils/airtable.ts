@@ -16,6 +16,9 @@ export interface Athlete {
   isVerified?: boolean;
   verifiedAt?: string;
   verifiedBy?: string;
+  claimedStatus?: 'Claimed' | 'Pending' | 'Rejected';
+  claimedByEmail?: string;
+  verifiedStatus?: 'Verified' | 'Unverified' | 'Pending';
 }
 
 // Try multiple possible environment variable names
@@ -113,6 +116,9 @@ export const fetchAthleteById = async (id: string): Promise<Athlete | null> => {
       isVerified: fields.IsVerified || false,
       verifiedAt: fields.VerifiedAt || null,
       verifiedBy: fields.VerifiedBy || null,
+      claimedStatus: fields.claimed_status || 'Pending',
+      claimedByEmail: fields.claimed_by_email || null,
+      verifiedStatus: fields.verified_status || 'Unverified',
     };
   } catch (error) {
     console.error('Error fetching athlete:', error);

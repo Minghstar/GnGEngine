@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useUser } from '@clerk/nextjs';
 import Layout from '../../components/Layout';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
@@ -67,9 +68,18 @@ function getDivisionColor(division: string): string {
 
 export default function Profile({ athlete }: ProfileProps) {
   const router = useRouter();
+  const { user } = useUser();
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
+
+  // Define ownership and verification logic
+  const userIsOwner = 
+    user?.publicMetadata?.role === "athlete" &&
+    athlete.claimedStatus === "Claimed" &&
+    user?.primaryEmailAddress?.emailAddress === athlete.claimedByEmail;
+
+  const isVerified = athlete.verifiedStatus === "Verified";
 
   if (router.isFallback) {
     return (
@@ -288,7 +298,7 @@ export default function Profile({ athlete }: ProfileProps) {
                 <h1 className="text-4xl md:text-5xl font-bold text-text font-heading">
                   {displayName}
                 </h1>
-                {athlete.isVerified && (
+                {isVerified && (
                   <motion.div
                     className="relative"
                     initial={{ scale: 0 }}
@@ -322,6 +332,25 @@ export default function Profile({ athlete }: ProfileProps) {
                   </motion.div>
                 )}
               </div>
+              
+              {/* Edit Button for Owners */}
+              {userIsOwner && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Button 
+                    onClick={() => router.push(`/profile/${athlete.id}/edit`)}
+                    className="bg-accent text-white px-6 py-3 rounded-lg font-semibold hover:bg-accent/90 transition-colors"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit My Info
+                  </Button>
+                </motion.div>
+              )}
               
               <div className="flex items-center space-x-4">
                 <span className={`bg-gradient-to-r ${getSportColor(displaySport)} text-white px-6 py-3 rounded-full text-lg font-bold font-heading shadow-lg`}>

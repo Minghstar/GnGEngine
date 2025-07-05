@@ -10,13 +10,16 @@ import type { AppProps } from 'next/app';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   
   return (
-    <AnimatePresence mode="wait">
-      <Component key={router.route} {...pageProps} />
-    </AnimatePresence>
+    <ClerkProvider>
+      <AnimatePresence mode="wait">
+        <Component key={router.route} {...pageProps} />
+      </AnimatePresence>
+    </ClerkProvider>
   );
 } 

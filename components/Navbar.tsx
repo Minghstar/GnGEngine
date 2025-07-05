@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
+import { SignedIn, SignedOut, SignInButton, SignOutButton, useUser } from '@clerk/nextjs';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -15,6 +16,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isSignedIn, user } = useUser();
 
   return (
     <nav className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -126,6 +128,15 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <SignedOut>
+        <SignInButton mode="modal" />
+      </SignedOut>
+      <SignedIn>
+        <SignOutButton />
+      </SignedIn>
+      {isSignedIn && user?.publicMetadata?.role === 'athlete' && (
+        // Show edit/profile buttons here
+      )}
     </nav>
   );
 };

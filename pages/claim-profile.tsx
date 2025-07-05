@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Layout from '../components/Layout';
@@ -8,6 +8,8 @@ import TextReveal from '../components/TextReveal';
 import Toast from '../components/Toast';
 import { Athlete } from '../utils/airtable';
 import { getDisplayName, getDisplayCollege, getDisplaySport, getInitials } from '../utils/athleteValidation';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
 interface ClaimProfileProps {}
 
@@ -31,6 +33,8 @@ interface ClaimFormData {
 }
 
 export default function ClaimProfile({}: ClaimProfileProps) {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -53,6 +57,30 @@ export default function ClaimProfile({}: ClaimProfileProps) {
     type: 'success',
     isVisible: false
   });
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (!isSignedIn) {
+        router.replace('/sign-in');
+      } else if (user?.publicMetadata?.role !== 'athlete') {
+        router.replace('/results');
+      }
+    }
+  }, [isLoaded, isSignedIn, user, router]);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: user.fullName || prev.fullName,
+        email: user.primaryEmailAddress?.emailAddress || prev.email
+      }));
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  if (!isLoaded || !isSignedIn || user?.publicMetadata?.role !== 'athlete') {
+    return null;
+  }
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
