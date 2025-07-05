@@ -56,7 +56,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
   const showLowResBadge = shouldShowLowResBadge(athlete.image);
   
   return (
-    <div className="bg-charcoal-black rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-neutral-gray">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-gray-200">
       {/* Image Section - Fixed aspect ratio with max dimensions */}
       <div className="relative w-full h-64 bg-background max-w-[250px] max-h-[250px] mx-auto">
         {athlete.image ? (
@@ -87,7 +87,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         
         {/* Fallback Avatar - Always present but hidden when image loads */}
         <div 
-          className={`fallback-avatar w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-red to-accent-blue ${athlete.image ? 'hidden' : ''}`}
+          className={`fallback-avatar w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-primary/80 ${athlete.image ? 'hidden' : ''}`}
         >
           <div className="text-white text-5xl font-bold font-heading">
             {initials}
@@ -96,7 +96,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         
         {/* Sport Badge */}
         <div className="absolute top-3 right-3">
-          <span className="bg-accent-blue text-text-white px-3 py-1 rounded-full text-xs font-bold font-heading shadow">
+          <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold font-heading shadow">
             {displaySport}
           </span>
         </div>
@@ -104,7 +104,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         {/* Low Res Badge */}
         {showLowResBadge && (
           <div className="absolute bottom-3 left-3">
-            <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold font-heading shadow">
+            <span className="bg-accent text-white px-2 py-1 rounded-full text-xs font-bold font-heading shadow">
               Low Res
             </span>
           </div>
@@ -114,7 +114,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
       {/* Content Section */}
       <div className="flex flex-col flex-1 p-4 gap-2">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-bold text-text-white font-heading flex-1 truncate">
+          <h3 className="text-lg font-bold text-text font-heading flex-1 truncate">
             {displayName}
           </h3>
           <span className="text-xl" title={displayNationality}>
@@ -122,17 +122,17 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           </span>
         </div>
         
-        <div className="space-y-1 text-sm text-neutral-gray font-body mb-2">
+        <div className="space-y-1 text-sm text-gray-600 font-body mb-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-primary-red rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
             <span className="truncate">{displayCollege}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-accent-blue rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-accent rounded-full"></span>
             <span>Year {displayYear}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 bg-primary-red rounded-full"></span>
+            <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
             <span className="truncate">{displayHometown}</span>
           </div>
         </div>

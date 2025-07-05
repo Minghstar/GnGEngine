@@ -112,21 +112,21 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
         </div>
 
         {/* Stats Summary */}
-        <div className="bg-charcoal-black rounded-xl p-6 mb-8 text-center">
+        <div className="bg-white rounded-xl p-6 mb-8 text-center shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">{sportCards.length}</div>
-              <div className="text-neutral-gray font-body">Sports Covered</div>
+              <div className="text-3xl font-bold text-primary font-heading">{sportCards.length}</div>
+              <div className="text-gray-600 font-body">Sports Covered</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">{athletes.length}</div>
-              <div className="text-neutral-gray font-body">Total Athletes</div>
+              <div className="text-3xl font-bold text-primary font-heading">{athletes.length}</div>
+              <div className="text-gray-600 font-body">Total Athletes</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">
+              <div className="text-3xl font-bold text-primary font-heading">
                 {Math.round(athletes.length / sportCards.length)}
               </div>
-              <div className="text-neutral-gray font-body">Avg. Athletes per Sport</div>
+              <div className="text-gray-600 font-body">Avg. Athletes per Sport</div>
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
 
         {/* Coming Soon Notice */}
         <div className="mt-12 text-center">
-          <div className="bg-gradient-to-r from-primary-red to-accent-blue rounded-xl p-8 text-white">
+          <div className="bg-gradient-to-r from-primary to-primary/80 rounded-xl p-8 text-white shadow-lg">
             <h3 className="text-2xl font-bold font-heading mb-4">
               Detailed Sport Pages Coming Soon
             </h3>

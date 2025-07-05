@@ -8,6 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'primary': '#1B5E20',
+        'accent': '#F9A825',
+        'bg': '#FAFAFA',
+        'text': '#212121',
+        'success': '#2E7D32',
+        'danger': '#C62828',
+        // Legacy colors for gradual migration
         'primary-red': '#D7263D',
         'charcoal-black': '#1E1E24',
         'neutral-gray': '#F5F5F5',

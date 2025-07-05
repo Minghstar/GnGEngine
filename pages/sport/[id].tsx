@@ -52,10 +52,10 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
             Back to Results
           </button>
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="bg-gradient-to-br from-primary-red to-accent-blue rounded-full p-3">
+            <div className="bg-gradient-to-br from-primary to-primary/80 rounded-full p-3">
               <SportIcons sport={sportName} size={32} className="text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-charcoal font-heading">
+            <h1 className="text-4xl md:text-5xl font-bold text-text font-heading">
               {sportName} Athletes
             </h1>
           </div>
@@ -65,26 +65,26 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
         </div>
 
         {/* Sport Stats */}
-        <div className="bg-charcoal-black rounded-xl p-6 mb-8">
+        <div className="bg-white rounded-xl p-6 mb-8 shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">{sportStats.totalAthletes}</div>
-              <div className="text-neutral-gray font-body">Total Athletes</div>
+              <div className="text-3xl font-bold text-primary font-heading">{sportStats.totalAthletes}</div>
+              <div className="text-gray-600 font-body">Total Athletes</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">{sportStats.colleges.length}</div>
-              <div className="text-neutral-gray font-body">Colleges</div>
+              <div className="text-3xl font-bold text-primary font-heading">{sportStats.colleges.length}</div>
+              <div className="text-gray-600 font-body">Colleges</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-red font-heading">{sportStats.years.length}</div>
-              <div className="text-neutral-gray font-body">Class Years</div>
+              <div className="text-3xl font-bold text-primary font-heading">{sportStats.years.length}</div>
+              <div className="text-gray-600 font-body">Class Years</div>
             </div>
           </div>
         </div>
 
         {/* Coming Soon Notice */}
         <div className="mb-8">
-          <div className="bg-gradient-to-r from-primary-red to-accent-blue rounded-xl p-6 text-white">
+          <div className="bg-gradient-to-r from-primary to-primary/80 rounded-xl p-6 text-white shadow-lg">
             <h3 className="text-xl font-bold font-heading mb-3">
               Detailed {sportName} Statistics Coming Soon
             </h3>
@@ -116,13 +116,13 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-charcoal mb-2 font-heading">No {sportName} Athletes Found</h3>
-            <p className="text-text-secondary mb-4 font-body">
+            <h3 className="text-xl font-semibold text-text mb-2 font-heading">No {sportName} Athletes Found</h3>
+            <p className="text-gray-600 mb-4 font-body">
               No athletes found for {sportName}. Check back later or browse other sports.
             </p>
             <button
               onClick={() => router.push('/results')}
-              className="px-6 py-2 bg-accent text-white rounded-md hover:bg-blue-700 transition-colors font-heading"
+              className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors font-heading shadow-md"
             >
               Browse All Sports
             </button>

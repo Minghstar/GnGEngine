@@ -15,7 +15,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-charcoal-black/95 backdrop-blur-md border-b border-neutral-gray sticky top-0 z-50">
+    <nav className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -29,7 +29,7 @@ const Navbar = () => {
                 className="rounded-lg bg-white/10"
               />
             </div>
-            <span className="text-2xl font-bold text-white font-heading tracking-tight">GNG Engine</span>
+            <span className="text-2xl font-bold text-primary font-heading tracking-tight">GNG Engine</span>
           </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 ml-8">
@@ -37,7 +37,7 @@ const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-neutral-gray hover:text-primary-red px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
+                className="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -50,7 +50,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-neutral-gray hover:text-primary-red focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-red transition-all duration-300"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-all duration-300"
             >
               <span className="sr-only">Open main menu</span>
               {!isMenuOpen ? (
@@ -68,13 +68,13 @@ const Navbar = () => {
       </div>
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden bg-charcoal-black border-t border-neutral-gray">
+        <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-4 space-y-2 flex flex-col">
             {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-neutral-gray hover:text-primary-red block px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
+                className="text-gray-600 hover:text-primary block px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}

@@ -9,9 +9,9 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ headline, subtext, onPrimaryClick, onSecondaryClick }) => (
-  <section className="w-full flex flex-col items-center justify-center py-24 px-4 bg-gradient-to-br from-charcoal-black to-primary-red min-h-[60vh] text-center">
-    <h1 className="font-heading text-4xl md:text-5xl font-bold text-text-white mb-4 leading-tight">{headline}</h1>
-    <p className="font-body text-xl text-neutral-gray mb-8 max-w-2xl mx-auto">{subtext}</p>
+  <section className="w-full flex flex-col items-center justify-center py-24 px-4 bg-gradient-to-br from-primary to-primary/80 min-h-[60vh] text-center">
+    <h1 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">{headline}</h1>
+    <p className="font-body text-xl text-white/90 mb-8 max-w-2xl mx-auto">{subtext}</p>
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <Button variant="primary" onClick={onPrimaryClick}>Explore Athletes</Button>
       <Button variant="secondary" onClick={onSecondaryClick}>View Results</Button>
