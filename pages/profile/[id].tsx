@@ -235,10 +235,15 @@ export default function Profile({ athlete }: ProfileProps) {
         </Card>
 
         {/* Claim Profile Modal */}
-        <ClaimProfileModal
-          isOpen={isClaimModalOpen}
-          onClose={() => setIsClaimModalOpen(false)}
+                <ClaimProfileModal 
+          isOpen={isClaimModalOpen} 
+          onClose={() => setIsClaimModalOpen(false)} 
           athleteName={displayName}
+          athleteId={athlete.id}
+          onVerificationSuccess={() => {
+            // Refresh the page to show the verified badge
+            window.location.reload();
+          }}
         />
       </div>
     </Layout>

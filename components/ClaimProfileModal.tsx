@@ -6,9 +6,11 @@ interface ClaimProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   athleteName: string;
+  athleteId?: string;
+  onVerificationSuccess?: () => void;
 }
 
-const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({ isOpen, onClose, athleteName }) => {
+const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({ isOpen, onClose, athleteName, athleteId, onVerificationSuccess }) => {
   const [formData, setFormData] = useState({
     name: athleteName,
     email: '',
@@ -22,17 +24,70 @@ const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({ isOpen, onClose, 
     setIsSubmitting(true);
     
     try {
-      // Here you would typically send the data to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSubmitStatus('success');
-      setTimeout(() => {
-        onClose();
-        setSubmitStatus('idle');
-        setFormData({ name: athleteName, email: '', message: '' });
-      }, 2000);
+      // Send claim request
+      const response = await fetch('/api/claim-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          athleteId,
+          ...formData
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setTimeout(() => {
+          onClose();
+          setSubmitStatus('idle');
+          setFormData({ name: athleteName, email: '', message: '' });
+        }, 2000);
+      } else {
+        setSubmitStatus('error');
+      }
     } catch (error) {
+      console.error('Error submitting claim:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleVerifyProfile = async () => {
+    if (!athleteId) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/verify-athlete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          athleteId,
+          verificationData: {
+            verifiedBy: formData.name,
+            method: 'Email',
+            notes: formData.message || 'Self-verified via profile claim'
+          }
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        onVerificationSuccess?.();
+        setTimeout(() => {
+          onClose();
+          setSubmitStatus('idle');
+          setFormData({ name: athleteName, email: '', message: '' });
+        }, 2000);
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Error verifying profile:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -150,8 +205,8 @@ const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({ isOpen, onClose, 
                 />
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-4">
+              {/* Action Buttons */}
+              <div className="pt-4 space-y-3">
                 <Button
                   type="submit"
                   variant="primary"
@@ -160,6 +215,18 @@ const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({ isOpen, onClose, 
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Claim Request'}
                 </Button>
+                
+                {athleteId && (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    disabled={isSubmitting}
+                    onClick={handleVerifyProfile}
+                  >
+                    {isSubmitting ? 'Verifying...' : 'Verify This Profile'}
+                  </Button>
+                )}
               </div>
             </form>
           )}

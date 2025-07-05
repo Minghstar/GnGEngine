@@ -116,8 +116,8 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           </span>
         </div>
         
-        {/* Verified Badge - Show for athletes with complete profiles */}
-        {athlete.image && athlete.name && athlete.college && (
+        {/* Verified Badge - Only show for actually verified athletes */}
+        {athlete.isVerified && (
           <div className="absolute top-3 left-3">
             <motion.span 
               className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full font-semibold shadow relative overflow-hidden"
@@ -125,6 +125,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
                 scale: 1.05,
                 transition: { duration: 0.2 }
               }}
+              title={`Verified on ${athlete.verifiedAt ? new Date(athlete.verifiedAt).toLocaleDateString() : 'Unknown date'}`}
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -137,6 +138,9 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
                   ease: 'easeInOut'
                 }}
               />
+              <svg className="w-3 h-3 mr-1 inline" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
               Verified
             </motion.span>
           </div>

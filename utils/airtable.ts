@@ -13,6 +13,9 @@ export interface Athlete {
   highSchool?: string;
   nationality?: string;
   division?: DivisionInfo;
+  isVerified?: boolean;
+  verifiedAt?: string;
+  verifiedBy?: string;
 }
 
 // Try multiple possible environment variable names
@@ -64,18 +67,21 @@ export const fetchAthletes = async (): Promise<Athlete[]> => {
 
     return allRecords.map((record: any) => {
       const college = record.fields.College || 'Unknown';
-      return {
-        id: record.id,
-        name: record.fields.Name || 'Unknown',
-        sport: record.fields.Sport || 'Unknown',
-        year: record.fields.Year || 'Unknown',
-        hometown: record.fields.Hometown || 'Unknown',
-        college: college,
-        image: record.fields.Image?.[0]?.url || null,
-        highSchool: record.fields.HighSchool || null,
-        nationality: record.fields.Nationality || 'Australian',
-        division: getDivisionInfo(college),
-      };
+              return {
+          id: record.id,
+          name: record.fields.Name || 'Unknown',
+          sport: record.fields.Sport || 'Unknown',
+          year: record.fields.Year || 'Unknown',
+          hometown: record.fields.Hometown || 'Unknown',
+          college: college,
+          image: record.fields.Image?.[0]?.url || null,
+          highSchool: record.fields.HighSchool || null,
+          nationality: record.fields.Nationality || 'Australian',
+          division: getDivisionInfo(college),
+          isVerified: record.fields.IsVerified || false,
+          verifiedAt: record.fields.VerifiedAt || null,
+          verifiedBy: record.fields.VerifiedBy || null,
+        };
     });
   } catch (error) {
     console.error('Error fetching athletes:', error);
@@ -104,6 +110,9 @@ export const fetchAthleteById = async (id: string): Promise<Athlete | null> => {
       highSchool: fields.HighSchool || null,
       nationality: fields.Nationality || 'Australian',
       division: getDivisionInfo(college),
+      isVerified: fields.IsVerified || false,
+      verifiedAt: fields.VerifiedAt || null,
+      verifiedBy: fields.VerifiedBy || null,
     };
   } catch (error) {
     console.error('Error fetching athlete:', error);
