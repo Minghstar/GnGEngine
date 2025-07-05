@@ -103,27 +103,28 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4 font-heading">
+          <h1 className="text-4xl md:text-5xl font-bold text-text mb-4 font-heading">
             Sports Results
           </h1>
-          <p className="text-lg md:text-xl text-text-secondary max-w-3xl mx-auto font-body">
+          <div className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"></div>
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-body">
             Explore Australian college athletes by sport. Click on any sport to view detailed results and statistics.
           </p>
         </div>
 
         {/* Stats Summary */}
-        <div className="bg-white rounded-xl p-6 mb-8 text-center shadow-md">
+        <div className="bg-white rounded-xl p-6 mb-8 text-center shadow-md border-l-4 border-accent">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">{sportCards.length}</div>
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{sportCards.length}</div>
               <div className="text-gray-600 font-body">Sports Covered</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">{athletes.length}</div>
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{athletes.length}</div>
               <div className="text-gray-600 font-body">Total Athletes</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">
                 {Math.round(athletes.length / sportCards.length)}
               </div>
               <div className="text-gray-600 font-body">Avg. Athletes per Sport</div>
@@ -135,11 +136,11 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <div className="text-center">
-              <svg className="animate-spin h-12 w-12 text-accent mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-12 w-12 text-primary mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <p className="text-lg text-text-secondary font-body">Loading sports...</p>
+              <p className="text-lg text-gray-600 font-body">Loading sports...</p>
             </div>
           </div>
         ) : (
@@ -172,14 +173,17 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
                     <div className="text-white/80 text-sm font-body">
                       Click to view details
                     </div>
-                    <svg 
-                      className="w-6 h-6 text-white/80 group-hover:translate-x-1 transition-transform duration-200" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <div className="flex items-center gap-2">
+                      <span className="text-accent font-semibold text-sm">View Details</span>
+                      <svg 
+                        className="w-6 h-6 text-accent group-hover:translate-x-1 transition-transform duration-200" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>

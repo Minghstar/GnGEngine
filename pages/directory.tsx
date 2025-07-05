@@ -107,6 +107,7 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
           <h1 className="text-4xl md:text-5xl font-bold text-text mb-4 font-heading">
             Athlete Directory
           </h1>
+          <div className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"></div>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-body">
             Discover talented Australian college athletes across all sports and universities. 
             Use the filters below to find exactly what you're looking for.

@@ -52,7 +52,7 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
             Back to Results
           </button>
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="bg-gradient-to-br from-primary to-primary/80 rounded-full p-3">
+            <div className="bg-gradient-to-br from-primary to-primary/80 rounded-full p-3 border-2 border-accent/30">
               <SportIcons sport={sportName} size={32} className="text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-text font-heading">
@@ -65,18 +65,18 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
         </div>
 
         {/* Sport Stats */}
-        <div className="bg-white rounded-xl p-6 mb-8 shadow-md">
+        <div className="bg-white rounded-xl p-6 mb-8 shadow-md border-l-4 border-accent">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">{sportStats.totalAthletes}</div>
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{sportStats.totalAthletes}</div>
               <div className="text-gray-600 font-body">Total Athletes</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">{sportStats.colleges.length}</div>
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{sportStats.colleges.length}</div>
               <div className="text-gray-600 font-body">Colleges</div>
             </div>
-            <div>
-              <div className="text-3xl font-bold text-primary font-heading">{sportStats.years.length}</div>
+            <div className="group">
+              <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{sportStats.years.length}</div>
               <div className="text-gray-600 font-body">Class Years</div>
             </div>
           </div>

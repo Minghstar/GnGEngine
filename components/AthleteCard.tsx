@@ -101,6 +101,15 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           </span>
         </div>
         
+        {/* Verified Badge - Show for athletes with complete profiles */}
+        {athlete.image && athlete.name && athlete.college && (
+          <div className="absolute top-3 left-3">
+            <span className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full font-semibold shadow">
+              Verified
+            </span>
+          </div>
+        )}
+        
         {/* Low Res Badge */}
         {showLowResBadge && (
           <div className="absolute bottom-3 left-3">

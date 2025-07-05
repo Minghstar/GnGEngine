@@ -61,7 +61,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-2xl p-6 mb-8">
+    <div className="bg-white shadow-md rounded-2xl p-6 mb-8 border-l-4 border-accent">
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
           {/* Sport Filter */}
