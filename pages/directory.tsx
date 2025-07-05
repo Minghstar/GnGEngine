@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 import FilterBar, { FilterState } from '../components/FilterBar';
 import SearchBar from '../components/SearchBar';
+import AISearchBar from '../components/AISearchBar';
 import AthleteCard from '../components/AthleteCard';
 import ScrollAnimation from '../components/ScrollAnimation';
 import TextReveal from '../components/TextReveal';
@@ -19,46 +20,92 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshError, setRefreshError] = useState<string | null>(null);
+  const [aiFilters, setAiFilters] = useState<any>(null);
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
   }, []);
 
+  const handleAISearch = useCallback((filters: any) => {
+    setAiFilters(filters);
+    setSearchQuery(''); // Clear manual search when using AI search
+  }, []);
+
+  const handleAIClear = useCallback(() => {
+    setAiFilters(null);
+  }, []);
+
   const handleFilterChange = (filters: FilterState) => {
     let filtered = athletes;
     
-    // Apply search filter
-    if (searchQuery) {
-      const search = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        athlete =>
-          athlete.name.toLowerCase().includes(search) ||
-          athlete.college.toLowerCase().includes(search) ||
-          athlete.hometown.toLowerCase().includes(search)
-      );
+    // Apply AI filters first (they take precedence)
+    if (aiFilters) {
+      if (aiFilters.sport) {
+        filtered = filtered.filter(athlete => 
+          athlete.sport.toLowerCase() === aiFilters.sport.toLowerCase()
+        );
+      }
+      if (aiFilters.gender) {
+        filtered = filtered.filter(athlete => 
+          athlete.gender?.toLowerCase() === aiFilters.gender.toLowerCase()
+        );
+      }
+      if (aiFilters.nationality) {
+        filtered = filtered.filter(athlete => 
+          (athlete.nationality || 'Australian').toLowerCase() === aiFilters.nationality.toLowerCase()
+        );
+      }
+      if (aiFilters.division) {
+        filtered = filtered.filter(athlete => 
+          athlete.division?.toLowerCase() === aiFilters.division.toLowerCase()
+        );
+      }
+      if (aiFilters.location) {
+        filtered = filtered.filter(athlete => 
+          athlete.hometown?.toLowerCase().includes(aiFilters.location.toLowerCase()) ||
+          athlete.college?.toLowerCase().includes(aiFilters.location.toLowerCase())
+        );
+      }
+      if (aiFilters.class_year) {
+        filtered = filtered.filter(athlete => 
+          athlete.year === aiFilters.class_year
+        );
+      }
+    } else {
+      // Apply manual search filter
+      if (searchQuery) {
+        const search = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+          athlete =>
+            athlete.name.toLowerCase().includes(search) ||
+            athlete.college.toLowerCase().includes(search) ||
+            athlete.hometown.toLowerCase().includes(search)
+        );
+      }
+      
+      // Apply other filters
+      if (filters.sport) {
+        filtered = filtered.filter(athlete => athlete.sport === filters.sport);
+      }
+      if (filters.college) {
+        filtered = filtered.filter(athlete => athlete.college === filters.college);
+      }
+      if (filters.year) {
+        filtered = filtered.filter(athlete => athlete.year === filters.year);
+      }
+      if (filters.nationality) {
+        filtered = filtered.filter(athlete => (athlete.nationality || 'Australian') === filters.nationality);
+      }
+      if (filters.search) {
+        const search = filters.search.toLowerCase();
+        filtered = filtered.filter(
+          athlete =>
+            athlete.name.toLowerCase().includes(search) ||
+            (athlete.college && athlete.college.toLowerCase().includes(search))
+        );
+      }
     }
     
-    // Apply other filters
-    if (filters.sport) {
-      filtered = filtered.filter(athlete => athlete.sport === filters.sport);
-    }
-    if (filters.college) {
-      filtered = filtered.filter(athlete => athlete.college === filters.college);
-    }
-    if (filters.year) {
-      filtered = filtered.filter(athlete => athlete.year === filters.year);
-    }
-    if (filters.nationality) {
-      filtered = filtered.filter(athlete => (athlete.nationality || 'Australian') === filters.nationality);
-    }
-    if (filters.search) {
-      const search = filters.search.toLowerCase();
-      filtered = filtered.filter(
-        athlete =>
-          athlete.name.toLowerCase().includes(search) ||
-          (athlete.college && athlete.college.toLowerCase().includes(search))
-      );
-    }
     setFilteredAthletes(filtered);
   };
 
@@ -133,10 +180,23 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
           </div>
         </ScrollAnimation>
 
-        {/* Search Bar */}
-        <div className="mb-8">
-          <SearchBar onSearch={handleSearch} />
-        </div>
+        {/* AI Search Bar */}
+        <ScrollAnimation delay={0.4}>
+          <div className="mb-8">
+            <AISearchBar 
+              onSearch={handleAISearch}
+              onClear={handleAIClear}
+              placeholder="Try: 'Male D1 tennis players from Melbourne'"
+            />
+          </div>
+        </ScrollAnimation>
+
+        {/* Manual Search Bar */}
+        <ScrollAnimation delay={0.6}>
+          <div className="mb-6">
+            <SearchBar onSearch={handleSearch} />
+          </div>
+        </ScrollAnimation>
 
         {/* Filter Bar */}
         <FilterBar athletes={athletes} onFilterChange={handleFilterChange} />
@@ -177,6 +237,11 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
           <p className="text-gray-600 font-body">
             Showing <span className="font-semibold text-text">{filteredAthletes.length}</span> of{' '}
             <span className="font-semibold text-text">{athletes.length}</span> athletes
+            {aiFilters && (
+              <span className="ml-2 text-sm text-accent font-medium">
+                • AI filtered
+              </span>
+            )}
           </p>
         </div>
 

@@ -6,9 +6,10 @@ A modern platform showcasing Australian college athletes, powered by AI and buil
 
 - **Modern Dark Theme**: Premium design inspired by Whoop.com and Teamworks.com
 - **Athlete Directory**: Browse verified Australian athletes across NCAA
+- **AI-Powered Search**: Natural language search using OpenAI GPT
 - **Real-time Data**: Live updates from Airtable backend
 - **Responsive Design**: Optimized for all devices
-- **AI-Powered**: Automated athlete discovery and verification
+- **Smart Filtering**: AI-powered athlete discovery and verification
 
 ## Tech Stack
 
@@ -33,6 +34,10 @@ A modern platform showcasing Australian college athletes, powered by AI and buil
 3. **Set up environment variables**
    Create a `.env.local` file with:
    ```
+   # OpenAI API Key for AI-powered search
+   OPENAI_API_KEY=sk-your-openai-api-key-here
+   
+   # Airtable Configuration
    AIRTABLE_API_KEY=your_airtable_api_key
    AIRTABLE_BASE_ID=your_airtable_base_id
    ```
@@ -79,6 +84,7 @@ A modern platform showcasing Australian college athletes, powered by AI and buil
 
 5. **Add Environment Variables**
    In the Render dashboard, add these environment variables:
+   - `OPENAI_API_KEY`: Your OpenAI API key (for AI search)
    - `AIRTABLE_API_KEY`: Your Airtable API key
    - `AIRTABLE_BASE_ID`: Your Airtable base ID
    - `NODE_ENV`: `production`
@@ -94,6 +100,7 @@ Make sure to set these in your Render dashboard:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
+| `OPENAI_API_KEY` | Your OpenAI API key for AI search | `sk-...` |
 | `AIRTABLE_API_KEY` | Your Airtable API key | `patI5AKLv1...` |
 | `AIRTABLE_BASE_ID` | Your Airtable base ID | `appwuNAQLA...` |
 | `NODE_ENV` | Environment | `production` |
@@ -123,6 +130,27 @@ FrontEnd GnG/
 ├── tailwind.config.js  # TailwindCSS configuration
 └── package.json        # Dependencies
 ```
+
+## AI-Powered Search
+
+The platform features an intelligent search system powered by OpenAI GPT that allows users to search for athletes using natural language queries.
+
+### Example Queries
+- `"Male D1 tennis players from Melbourne"`
+- `"Female golfers graduating in 2026"`
+- `"New Zealand swimmers from Division 2"`
+- `"Australian basketball players in D1"`
+
+### Setup
+1. Get an OpenAI API key from [platform.openai.com](https://platform.openai.com/api-keys)
+2. Add `OPENAI_API_KEY=sk-your-key-here` to your `.env.local` file
+3. The AI search will automatically parse queries and filter athletes
+
+### Features
+- **Natural Language Processing**: Convert text queries to structured filters
+- **Search History**: Recent searches are saved locally
+- **Keyboard Shortcuts**: Press `/` to focus search, `Enter` to search, `Escape` to clear
+- **Smart Filtering**: Combines multiple criteria in a single query
 
 ## Customization
 
