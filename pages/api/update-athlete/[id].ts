@@ -27,7 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Get user details from Clerk
-    const user = await clerkClient().users.getUser(userId);
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
     const userEmail = user.primaryEmailAddress?.emailAddress;
 
     // Check if user is the owner
