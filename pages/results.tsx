@@ -197,42 +197,43 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
                     transition: { duration: 0.1 }
                   }}
                 >
-                <div className={`bg-gradient-to-br ${sportCard.color} rounded-2xl p-8 text-white h-full flex flex-col justify-between`}>
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-white/20 rounded-full p-2">
-                          <SportIcons sport={sportCard.name} size={24} className="text-white" />
+                  <div className={`bg-gradient-to-br ${sportCard.color} rounded-2xl p-8 text-white h-full flex flex-col justify-between`}>
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-white/20 rounded-full p-2">
+                            <SportIcons sport={sportCard.name} size={24} className="text-white" />
+                          </div>
+                          <h3 className="text-2xl font-bold font-heading">{sportCard.name}</h3>
                         </div>
-                        <h3 className="text-2xl font-bold font-heading">{sportCard.name}</h3>
+                        <div className="bg-white/20 rounded-full px-3 py-1 text-sm font-semibold">
+                          {sportCard.athleteCount} athletes
+                        </div>
                       </div>
-                      <div className="bg-white/20 rounded-full px-3 py-1 text-sm font-semibold">
-                        {sportCard.athleteCount} athletes
+                      <p className="text-white/90 font-body mb-6">
+                        {sportCard.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="text-white/80 text-sm font-body">
+                        Click to view details
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-accent font-semibold text-sm">View Details</span>
+                        <svg 
+                          className="w-6 h-6 text-accent group-hover:translate-x-1 transition-transform duration-200" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
                       </div>
                     </div>
-                    <p className="text-white/90 font-body mb-6">
-                      {sportCard.description}
-                    </p>
                   </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="text-white/80 text-sm font-body">
-                      Click to view details
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-accent font-semibold text-sm">View Details</span>
-                      <svg 
-                        className="w-6 h-6 text-accent group-hover:translate-x-1 transition-transform duration-200" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </ScrollAnimation>
             ))}
           </div>
         )}
