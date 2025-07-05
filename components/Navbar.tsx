@@ -5,6 +5,7 @@ import Button from './Button';
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/directory', label: 'Directory' },
+  { href: '/results', label: 'Results' },
   { href: '/for-scouts', label: 'For Scouts' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },

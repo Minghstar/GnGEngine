@@ -14,7 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ headline, subtext, onPrimaryC
     <p className="font-body text-xl text-neutral-gray mb-8 max-w-2xl mx-auto">{subtext}</p>
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <Button variant="primary" onClick={onPrimaryClick}>Explore Athletes</Button>
-      <Button variant="secondary" onClick={onSecondaryClick}>Submit Athlete</Button>
+      <Button variant="secondary" onClick={onSecondaryClick}>View Results</Button>
     </div>
     {/* Placeholder for background image/collage */}
     <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'none' }} />

@@ -33,7 +33,7 @@ export default function Home({ athletes }: HomeProps) {
         headline="Discover Australia's Rising Athletes"
         subtext="Powered by AI. GNG Engine finds, verifies, and showcases Aussie talent in U.S. college sports."
         onPrimaryClick={() => window.location.href = '/directory'}
-        onSecondaryClick={() => window.location.href = '/submit'}
+        onSecondaryClick={() => window.location.href = '/results'}
       />
       <div className="max-w-5xl mx-auto w-full px-4">
         <StatsBar stats={stats} />
