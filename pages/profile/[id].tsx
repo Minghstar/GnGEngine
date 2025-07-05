@@ -180,6 +180,9 @@ export default function Profile({ athlete }: ProfileProps) {
               <div className="space-y-2 font-body text-base text-text-secondary">
                 <div><span className="font-bold text-charcoal">College:</span> {displayCollege}</div>
                 <div><span className="font-bold text-charcoal">Hometown:</span> {displayHometown}</div>
+                {athlete.division && athlete.division.division !== 'Unknown' && (
+                  <div><span className="font-bold text-charcoal">Division:</span> {athlete.division.fullName}</div>
+                )}
                 {displayHighSchool && (
                   <div><span className="font-bold text-charcoal">High School:</span> {displayHighSchool}</div>
                 )}

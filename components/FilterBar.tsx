@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Athlete } from '../utils/airtable';
+import { getAllDivisions } from '../utils/divisionMapping';
 import Input from './Input';
 import Select from './Select';
 import Button from './Button';
@@ -15,6 +16,7 @@ export interface FilterState {
   college: string;
   year: string;
   nationality: string;
+  division: string;
   search: string;
 }
 
@@ -24,6 +26,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
     college: '',
     year: '',
     nationality: '',
+    division: '',
     search: '',
   });
 
@@ -32,6 +35,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
     colleges: [] as string[],
     years: [] as string[],
     nationalities: [] as string[],
+    divisions: [] as string[],
   });
 
   useEffect(() => {
@@ -39,7 +43,8 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
     const colleges = Array.from(new Set(athletes.map(a => a.college))).sort();
     const years = Array.from(new Set(athletes.map(a => a.year))).sort();
     const nationalities = Array.from(new Set(athletes.map(a => a.nationality || 'Australian'))).sort();
-    setUniqueValues({ sports, colleges, years, nationalities });
+    const divisions = Array.from(new Set(athletes.map(a => a.division?.division || 'Unknown'))).sort();
+    setUniqueValues({ sports, colleges, years, nationalities, divisions });
   }, [athletes]);
 
   const handleFilterChange = (key: keyof FilterState, value: string) => {
@@ -54,6 +59,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
       college: '',
       year: '',
       nationality: '',
+      division: '',
       search: '',
     };
     setFilters(clearedFilters);
@@ -63,7 +69,7 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
   return (
     <div className="bg-white shadow-md rounded-2xl p-6 mb-8 border-l-4 border-accent">
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 flex-1">
           {/* Sport Filter */}
           <div>
             <label htmlFor="sport-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
@@ -127,6 +133,22 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
               <option value="">All Colleges</option>
               {uniqueValues.colleges.map(college => (
                 <option key={college} value={college}>{college}</option>
+              ))}
+            </Select>
+          </div>
+          {/* Division Filter */}
+          <div>
+            <label htmlFor="division-filter" className="block text-xs font-medium text-text-main mb-1 font-heading">
+              Division
+            </label>
+            <Select
+              id="division-filter"
+              value={filters.division}
+              onChange={e => handleFilterChange('division', e.target.value)}
+            >
+              <option value="">All Divisions</option>
+              {uniqueValues.divisions.map(division => (
+                <option key={division} value={division}>{division}</option>
               ))}
             </Select>
           </div>

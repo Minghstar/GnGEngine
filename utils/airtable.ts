@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { getDivisionInfo, DivisionInfo } from './divisionMapping';
+
 export interface Athlete {
   id: string;
   name: string;
@@ -10,6 +12,7 @@ export interface Athlete {
   image?: string;
   highSchool?: string;
   nationality?: string;
+  division?: DivisionInfo;
 }
 
 // Try multiple possible environment variable names
@@ -40,17 +43,21 @@ export const fetchAthletes = async (): Promise<Athlete[]> => {
       return [];
     }
 
-    return response.data.records.map((record: any) => ({
-      id: record.id,
-      name: record.fields.Name || 'Unknown',
-      sport: record.fields.Sport || 'Unknown',
-      year: record.fields.Year || 'Unknown',
-      hometown: record.fields.Hometown || 'Unknown',
-      college: record.fields.College || 'Unknown',
-      image: record.fields.Image?.[0]?.url || null,
-      highSchool: record.fields.HighSchool || null,
-      nationality: record.fields.Nationality || 'Australian',
-    }));
+    return response.data.records.map((record: any) => {
+      const college = record.fields.College || 'Unknown';
+      return {
+        id: record.id,
+        name: record.fields.Name || 'Unknown',
+        sport: record.fields.Sport || 'Unknown',
+        year: record.fields.Year || 'Unknown',
+        hometown: record.fields.Hometown || 'Unknown',
+        college: college,
+        image: record.fields.Image?.[0]?.url || null,
+        highSchool: record.fields.HighSchool || null,
+        nationality: record.fields.Nationality || 'Australian',
+        division: getDivisionInfo(college),
+      };
+    });
   } catch (error) {
     console.error('Error fetching athletes:', error);
     return [];
@@ -66,16 +73,18 @@ export const fetchAthleteById = async (id: string): Promise<Athlete | null> => {
     }
 
     const fields = response.data.fields;
+    const college = fields.College || 'Unknown';
     return {
       id: response.data.id,
       name: fields.Name || 'Unknown',
       sport: fields.Sport || 'Unknown',
       year: fields.Year || 'Unknown',
       hometown: fields.Hometown || 'Unknown',
-      college: fields.College || 'Unknown',
+      college: college,
       image: fields.Image?.[0]?.url || null,
       highSchool: fields.HighSchool || null,
       nationality: fields.Nationality || 'Australian',
+      division: getDivisionInfo(college),
     };
   } catch (error) {
     console.error('Error fetching athlete:', error);

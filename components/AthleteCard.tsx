@@ -176,6 +176,14 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
             <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
             <span className="truncate">{displayHometown}</span>
           </div>
+          {athlete.division && athlete.division.division !== 'Unknown' && (
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 bg-accent rounded-full"></span>
+              <span className="text-xs font-semibold bg-accent/10 text-accent px-2 py-1 rounded-full">
+                {athlete.division.division}
+              </span>
+            </div>
+          )}
         </div>
         
         <div className="mt-auto pt-2">

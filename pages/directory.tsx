@@ -57,7 +57,7 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
       }
       if (aiFilters.division) {
         filtered = filtered.filter(athlete => 
-          athlete.division?.toLowerCase() === aiFilters.division.toLowerCase()
+          athlete.division?.division?.toLowerCase() === aiFilters.division.toLowerCase()
         );
       }
       if (aiFilters.location) {
@@ -95,6 +95,9 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
       }
       if (filters.nationality) {
         filtered = filtered.filter(athlete => (athlete.nationality || 'Australian') === filters.nationality);
+      }
+      if (filters.division) {
+        filtered = filtered.filter(athlete => athlete.division?.division === filters.division);
       }
       if (filters.search) {
         const search = filters.search.toLowerCase();
