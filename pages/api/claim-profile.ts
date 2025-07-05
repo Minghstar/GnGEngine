@@ -6,9 +6,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { athleteId, name, email, message } = req.body;
+    const { athleteId, athleteName, fullName, email, socialMedia, explanation } = req.body;
 
-    if (!athleteId || !name || !email) {
+    if (!athleteId || !fullName || !email || !explanation) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -21,9 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // For now, we'll simulate a successful claim request
     console.log('Profile claim request:', {
       athleteId,
-      name,
+      athleteName,
+      fullName,
       email,
-      message,
+      socialMedia,
+      explanation,
       timestamp: new Date().toISOString()
     });
 
