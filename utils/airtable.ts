@@ -125,4 +125,43 @@ export const getUniqueValues = (athletes: Athlete[], field: keyof Athlete): stri
     .map(athlete => athlete[field])
     .filter((v): v is string => typeof v === 'string' && !!v);
   return [...new Set(values)].sort();
+};
+
+export interface ClaimRequest {
+  athleteName: string;
+  claimedByName: string;
+  email: string;
+  college: string;
+  sport: string;
+  socialMedia?: string;
+  explanation: string;
+  athleteRecordId: string;
+}
+
+export const createClaimRecord = async (claim: ClaimRequest): Promise<boolean> => {
+  try {
+    const response = await airtableApi.post('/Claims', {
+      records: [
+        {
+          fields: {
+            'Athlete Name': claim.athleteName,
+            'Claimed By Name': claim.claimedByName,
+            'Email': claim.email,
+            'College': claim.college,
+            'Sport': claim.sport,
+            'Social Media / Link': claim.socialMedia || '',
+            'Explanation': claim.explanation,
+            'Athlete Record ID': claim.athleteRecordId,
+            'Claim Status': 'Pending'
+          }
+        }
+      ]
+    });
+
+    console.log('✅ Claim record created successfully:', response.data);
+    return true;
+  } catch (error) {
+    console.error('❌ Error creating claim record:', error);
+    return false;
+  }
 }; 

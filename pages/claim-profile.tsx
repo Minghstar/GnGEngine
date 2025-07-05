@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import SearchBar from '../components/SearchBar';
 import ScrollAnimation from '../components/ScrollAnimation';
 import TextReveal from '../components/TextReveal';
+import Toast from '../components/Toast';
 import { Athlete } from '../utils/airtable';
 import { getDisplayName, getDisplayCollege, getDisplaySport, getInitials } from '../utils/athleteValidation';
 
@@ -25,6 +26,8 @@ interface ClaimFormData {
   explanation: string;
   athleteId: string;
   athleteName: string;
+  college: string;
+  sport: string;
 }
 
 export default function ClaimProfile({}: ClaimProfileProps) {
@@ -39,10 +42,17 @@ export default function ClaimProfile({}: ClaimProfileProps) {
     socialMedia: '',
     explanation: '',
     athleteId: '',
-    athleteName: ''
+    athleteName: '',
+    college: '',
+    sport: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error'; isVisible: boolean }>({
+    message: '',
+    type: 'success',
+    isVisible: false
+  });
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
@@ -79,7 +89,9 @@ export default function ClaimProfile({}: ClaimProfileProps) {
       socialMedia: '',
       explanation: '',
       athleteId: athlete.id,
-      athleteName: athlete.name
+      athleteName: athlete.name,
+      college: athlete.college,
+      sport: athlete.sport
     });
     setIsClaimModalOpen(true);
   };
@@ -99,6 +111,11 @@ export default function ClaimProfile({}: ClaimProfileProps) {
 
       if (response.ok) {
         setSubmitStatus('success');
+        setToast({
+          message: 'Claim request submitted successfully! We\'ll get back to you within 24-48 hours.',
+          type: 'success',
+          isVisible: true
+        });
         setTimeout(() => {
           setIsClaimModalOpen(false);
           setSubmitStatus('idle');
@@ -107,10 +124,20 @@ export default function ClaimProfile({}: ClaimProfileProps) {
         }, 2000);
       } else {
         setSubmitStatus('error');
+        setToast({
+          message: 'Failed to submit claim request. Please try again.',
+          type: 'error',
+          isVisible: true
+        });
       }
     } catch (error) {
       console.error('Error submitting claim:', error);
       setSubmitStatus('error');
+      setToast({
+        message: 'An error occurred. Please try again or contact us directly.',
+        type: 'error',
+        isVisible: true
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -121,6 +148,10 @@ export default function ClaimProfile({}: ClaimProfileProps) {
       ...prev,
       [e.target.name]: e.target.value
     }));
+  };
+
+  const closeToast = () => {
+    setToast(prev => ({ ...prev, isVisible: false }));
   };
 
   return (
@@ -432,6 +463,14 @@ export default function ClaimProfile({}: ClaimProfileProps) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Toast Notification */}
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={closeToast}
+        />
       </div>
     </Layout>
   );

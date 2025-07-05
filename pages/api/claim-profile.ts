@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { createClaimRecord, fetchAthleteById } from '../../utils/airtable';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -12,34 +13,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Here you would typically:
-    // 1. Send an email notification to your team
-    // 2. Store the claim request in a database
-    // 3. Send a confirmation email to the claimant
-    // 4. Log the claim request for review
+    // Fetch athlete details to get college and sport
+    const athlete = await fetchAthleteById(athleteId);
+    if (!athlete) {
+      return res.status(404).json({ error: 'Athlete not found' });
+    }
 
-    // For now, we'll simulate a successful claim request
-    console.log('Profile claim request:', {
-      athleteId,
-      athleteName,
-      fullName,
-      email,
-      socialMedia,
-      explanation,
-      timestamp: new Date().toISOString()
-    });
+    // Create claim record in Airtable
+    const claimData = {
+      athleteName: athleteName,
+      claimedByName: fullName,
+      email: email,
+      college: athlete.college,
+      sport: athlete.sport,
+      socialMedia: socialMedia || '',
+      explanation: explanation,
+      athleteRecordId: athleteId
+    };
 
-    // In a real implementation, you might:
-    // - Send email to admin: `New profile claim for athlete ${athleteId}`
-    // - Send email to claimant: `We've received your claim request`
-    // - Store in database for review
-    // - Create a ticket in your support system
+    const success = await createClaimRecord(claimData);
 
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Claim request submitted successfully',
-      claimId: `claim_${Date.now()}`
-    });
+    if (success) {
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Claim request submitted successfully',
+        claimId: `claim_${Date.now()}`
+      });
+    } else {
+      return res.status(500).json({ error: 'Failed to create claim record' });
+    }
 
   } catch (error) {
     console.error('Error processing claim request:', error);
