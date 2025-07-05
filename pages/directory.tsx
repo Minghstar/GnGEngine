@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GetStaticProps } from 'next';
+import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 import FilterBar, { FilterState } from '../components/FilterBar';
 import SearchBar from '../components/SearchBar';
 import AthleteCard from '../components/AthleteCard';
+import ScrollAnimation from '../components/ScrollAnimation';
+import TextReveal from '../components/TextReveal';
 import { fetchAthletes, Athlete } from '../utils/airtable';
 
 interface DirectoryProps {
@@ -103,16 +106,32 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold text-text mb-4 font-heading">
-            Athlete Directory
-          </h1>
-          <div className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"></div>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-body">
-            Discover talented Australian college athletes across all sports and universities. 
-            Use the filters below to find exactly what you're looking for.
-          </p>
-        </div>
+        <ScrollAnimation delay={0.2}>
+          <div className="text-center mb-10">
+            <TextReveal 
+              type="word"
+              delay={0.3}
+              stagger={0.1}
+              className="text-4xl md:text-5xl font-bold text-text mb-4 font-heading"
+            >
+              Athlete Directory
+            </TextReveal>
+            <motion.div 
+              className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"
+              initial={{ width: 0 }}
+              animate={{ width: "5rem" }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            ></motion.div>
+            <TextReveal 
+              type="line"
+              delay={0.7}
+              className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-body"
+            >
+              Discover talented Australian college athletes across all sports and universities. 
+              Use the filters below to find exactly what you're looking for.
+            </TextReveal>
+          </div>
+        </ScrollAnimation>
 
         {/* Search Bar */}
         <div className="mb-8">
@@ -201,8 +220,14 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
         {/* Athletes Grid */}
         {!loading && filteredAthletes.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredAthletes.map((athlete) => (
-              <AthleteCard key={athlete.id} athlete={athlete} />
+            {filteredAthletes.map((athlete, index) => (
+              <ScrollAnimation
+                key={athlete.id}
+                delay={index * 0.05}
+                y={20}
+              >
+                <AthleteCard athlete={athlete} />
+              </ScrollAnimation>
             ))}
           </div>
         )}

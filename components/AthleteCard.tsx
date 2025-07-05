@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Athlete } from '../utils/airtable';
 import { 
   validateAthlete, 
@@ -29,6 +29,9 @@ function getFlagEmoji(nationality: string) {
 }
 
 const AthleteCard = ({ athlete }: AthleteCardProps) => {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, threshold: 0.1 });
+  
   // Conditional rendering logic - don't render if missing critical data
   if (!athlete.name && !athlete.image) {
     return null;
@@ -58,11 +61,15 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
   
   return (
     <motion.div 
+      ref={ref}
       className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-gray-200"
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
+      whileHover={{ 
+        y: -5,
+        transition: { duration: 0.2 }
+      }}
     >
       {/* Image Section - Fixed aspect ratio with max dimensions */}
       <div className="relative w-full h-64 bg-background max-w-[250px] max-h-[250px] mx-auto">
@@ -111,9 +118,26 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
         {/* Verified Badge - Show for athletes with complete profiles */}
         {athlete.image && athlete.name && athlete.college && (
           <div className="absolute top-3 left-3">
-            <span className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full font-semibold shadow">
+            <motion.span 
+              className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full font-semibold shadow relative overflow-hidden"
+              whileHover={{ 
+                scale: 1.05,
+                transition: { duration: 0.2 }
+              }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                initial={{ x: '-100%' }}
+                animate={{ x: '100%' }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                  ease: 'easeInOut'
+                }}
+              />
               Verified
-            </span>
+            </motion.span>
           </div>
         )}
         

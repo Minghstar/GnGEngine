@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Button from './Button';
+import TextReveal from './TextReveal';
 
 interface HeroSectionProps {
   headline: string;
@@ -44,14 +45,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ headline, subtext, onPrimaryC
     </motion.div>
     
     <div className="relative z-10">
-      <motion.h1 
+      <TextReveal 
+        type="word"
+        delay={0.2}
+        stagger={0.1}
         className="font-heading text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.2 }}
       >
         {headline}
-      </motion.h1>
+      </TextReveal>
       
       <motion.div 
         className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"
@@ -60,14 +61,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ headline, subtext, onPrimaryC
         transition={{ duration: 0.6, delay: 0.4 }}
       ></motion.div>
       
-      <motion.p 
+      <TextReveal 
+        type="line"
+        delay={0.6}
         className="font-body text-xl text-white/90 mb-8 max-w-2xl mx-auto"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
       >
         {subtext}
-      </motion.p>
+      </TextReveal>
       
       <motion.div 
         className="flex flex-col sm:flex-row gap-4 justify-center"

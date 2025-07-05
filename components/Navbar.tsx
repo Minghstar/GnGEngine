@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 
 const navLinks = [
@@ -33,18 +34,36 @@ const Navbar = () => {
           </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 ml-8">
-            {navLinks.map(link => (
-              <Link
+            {navLinks.map((link, index) => (
+              <motion.div
                 key={link.href}
-                href={link.href}
-                className="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {link.label}
-              </Link>
+                <Link
+                  href={link.href}
+                  className="text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200 relative group"
+                >
+                  {link.label}
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </Link>
+              </motion.div>
             ))}
-            <Link href="/submit" className="ml-4">
-              <Button variant="primary">Submit Athlete</Button>
-            </Link>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              <Link href="/submit" className="ml-4">
+                <Button variant="primary">Submit Athlete</Button>
+              </Link>
+            </motion.div>
           </div>
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
@@ -67,25 +86,45 @@ const Navbar = () => {
         </div>
       </div>
       {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
-          <div className="px-4 py-4 space-y-2 flex flex-col">
-            {navLinks.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-600 hover:text-primary block px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            className="md:hidden bg-white border-t border-gray-200"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="px-4 py-4 space-y-2 flex flex-col">
+              {navLinks.map((link, index) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    href={link.href}
+                    className="text-gray-600 hover:text-primary block px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 }}
               >
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/submit" className="mt-2">
-              <Button variant="primary" className="w-full">Submit Athlete</Button>
-            </Link>
-          </div>
-        </div>
-      )}
+                <Link href="/submit" className="mt-2">
+                  <Button variant="primary" className="w-full">Submit Athlete</Button>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

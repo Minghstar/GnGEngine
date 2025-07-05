@@ -7,8 +7,16 @@ import '@fontsource/inter/700.css';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/700.css';
 import type { AppProps } from 'next/app';
+import { AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/router';
 import '../styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  const router = useRouter();
+  
+  return (
+    <AnimatePresence mode="wait">
+      <Component key={router.route} {...pageProps} />
+    </AnimatePresence>
+  );
 } 
