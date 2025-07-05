@@ -45,11 +45,6 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
           athlete.sport.toLowerCase() === aiFilters.sport.toLowerCase()
         );
       }
-      if (aiFilters.gender) {
-        filtered = filtered.filter(athlete => 
-          athlete.gender?.toLowerCase() === aiFilters.gender.toLowerCase()
-        );
-      }
       if (aiFilters.nationality) {
         filtered = filtered.filter(athlete => 
           (athlete.nationality || 'Australian').toLowerCase() === aiFilters.nationality.toLowerCase()
