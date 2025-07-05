@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Twitter } from 'lucide-react';
 import NewsletterSignup from './NewsletterSignup';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -14,9 +15,18 @@ const Footer = () => {
           </div>
         </div>
         
-        {/* Footer Links */}
+        {/* Logo and Footer Links */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left border-t border-neutral-gray pt-8">
-          <div className="flex flex-col md:flex-row items-center gap-2 text-neutral-gray text-sm font-body">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-2 text-neutral-gray text-sm font-body">
+            <div className="mb-2 md:mb-0">
+              <Image
+                src="/logo-gng-engine.png"
+                alt="GNG Engine Logo"
+                width={40}
+                height={40}
+                className="rounded-lg bg-white/10"
+              />
+            </div>
             <span>&copy; {new Date().getFullYear()} GNG Engine. All rights reserved.</span>
             <span className="hidden md:inline mx-2">|</span>
             <a href="mailto:info@gngengine.com" className="hover:text-primary-red transition-colors">info@gngengine.com</a>

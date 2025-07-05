@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import Button from './Button';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -19,8 +20,15 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary-red to-accent-blue rounded-lg flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-lg font-heading">GNG</span>
+            <div className="mr-3">
+              <Image
+                src="/logo-gng-engine.png"
+                alt="GNG Engine Logo"
+                width={40}
+                height={40}
+                priority
+                className="rounded-lg bg-white/10"
+              />
             </div>
             <span className="text-2xl font-bold text-white font-heading tracking-tight">GNG Engine</span>
           </Link>
