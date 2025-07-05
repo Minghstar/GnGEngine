@@ -63,9 +63,16 @@ const Navbar = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <Link href="/submit" className="ml-4">
-                <Button variant="primary">Submit Athlete</Button>
-              </Link>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button variant="primary">Sign In</Button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <SignOutButton>
+                  <Button variant="secondary">Sign Out</Button>
+                </SignOutButton>
+              </SignedIn>
             </motion.div>
           </div>
           {/* Mobile menu button */}
@@ -120,20 +127,22 @@ const Navbar = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 }}
               >
-                <Link href="/submit" className="mt-2">
-                  <Button variant="primary" className="w-full">Submit Athlete</Button>
-                </Link>
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <Button variant="primary" className="w-full">Sign In</Button>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <SignOutButton>
+                    <Button variant="secondary" className="w-full">Sign Out</Button>
+                  </SignOutButton>
+                </SignedIn>
               </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-      <SignedOut>
-        <SignInButton mode="modal" />
-      </SignedOut>
-      <SignedIn>
-        <SignOutButton />
-      </SignedIn>
+
     </nav>
   );
 };
