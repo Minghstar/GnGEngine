@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import { SignedIn, SignedOut, SignInButton, SignOutButton, useUser } from '@clerk/nextjs';
@@ -7,6 +7,27 @@ import { SignedIn, SignedOut, SignInButton, SignOutButton, useUser } from '@cler
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isSignedIn, user } = useUser();
+  const [claimedProfileId, setClaimedProfileId] = useState<string | null>(null);
+
+  // Check if athlete has claimed profile
+  useEffect(() => {
+    const checkClaimedProfile = async () => {
+      if (isSignedIn && user?.publicMetadata?.role === 'athlete' && user?.primaryEmailAddress?.emailAddress) {
+        try {
+          const response = await fetch(`/api/search-athletes?claimedBy=${encodeURIComponent(user.primaryEmailAddress.emailAddress)}`);
+          const data = await response.json();
+          
+          if (data.success && data.athletes.length > 0) {
+            setClaimedProfileId(data.athletes[0].id);
+          }
+        } catch (error) {
+          console.error('Error checking claimed profile:', error);
+        }
+      }
+    };
+
+    checkClaimedProfile();
+  }, [isSignedIn, user]);
 
   // Role-based navigation
   const getNavLinks = () => {
@@ -19,10 +40,19 @@ const Navbar = () => {
     ];
 
     if (isSignedIn && user?.publicMetadata?.role === 'athlete') {
-      return [
-        ...baseLinks,
-        { href: '/claim-profile', label: 'Claim Profile' },
-      ];
+      if (claimedProfileId) {
+        // Athlete has claimed profile - show "My Profile" instead of "Claim Profile"
+        return [
+          ...baseLinks,
+          { href: `/profile/${claimedProfileId}`, label: 'My Profile' },
+        ];
+      } else {
+        // Athlete hasn't claimed profile yet
+        return [
+          ...baseLinks,
+          { href: '/claim-profile', label: 'Claim Profile' },
+        ];
+      }
     }
 
     return baseLinks;
@@ -111,6 +141,9 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="px-4 py-2 text-sm text-gray-500 border-b">
                       {user?.publicMetadata?.role === 'athlete' ? 'Athlete' : 'Follower'}
+                      {claimedProfileId && user?.publicMetadata?.role === 'athlete' && (
+                        <span className="block text-xs text-accent">✓ Profile Claimed</span>
+                      )}
                     </div>
                     <SignOutButton>
                       <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -203,6 +236,9 @@ const Navbar = () => {
                   <div className="border-t pt-4 mt-4">
                     <div className="px-3 py-2 text-sm text-gray-500">
                       {user?.publicMetadata?.role === 'athlete' ? 'Athlete' : 'Follower'}
+                      {claimedProfileId && user?.publicMetadata?.role === 'athlete' && (
+                        <span className="block text-xs text-accent">✓ Profile Claimed</span>
+                      )}
                     </div>
                     <SignOutButton>
                       <button className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">

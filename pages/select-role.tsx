@@ -13,12 +13,38 @@ export default function SelectRole() {
   // If user already has a role, redirect them
   if (user?.publicMetadata?.role) {
     if (user.publicMetadata.role === 'athlete') {
-      router.push('/claim-profile');
+      // Check if athlete has claimed profile
+      checkAthleteProfile();
     } else {
       router.push('/results');
     }
     return null;
   }
+
+  const checkAthleteProfile = async () => {
+    if (!user?.primaryEmailAddress?.emailAddress) {
+      router.push('/claim-profile');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/search-athletes?claimedBy=${encodeURIComponent(user.primaryEmailAddress.emailAddress)}`);
+      const data = await response.json();
+      
+      if (data.success && data.athletes.length > 0) {
+        // User has claimed a profile - redirect to it
+        const claimedProfile = data.athletes[0];
+        router.push(`/profile/${claimedProfile.id}`);
+      } else {
+        // No claimed profile - redirect to claim page
+        router.push('/claim-profile');
+      }
+    } catch (error) {
+      console.error('Error checking athlete profile:', error);
+      // Fallback to claim page
+      router.push('/claim-profile');
+    }
+  };
 
   const handleRoleSelect = async (role: 'athlete' | 'follower') => {
     setSelectedRole(role);
@@ -36,7 +62,8 @@ export default function SelectRole() {
       if (response.ok) {
         // Redirect based on role
         if (role === 'athlete') {
-          router.push('/claim-profile');
+          // Check if athlete has claimed profile
+          await checkAthleteProfile();
         } else {
           router.push('/results');
         }
