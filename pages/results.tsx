@@ -221,7 +221,7 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
