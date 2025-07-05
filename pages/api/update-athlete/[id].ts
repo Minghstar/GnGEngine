@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { requireSession } from '@clerk/nextjs/api';
+import { getAuth } from '@clerk/nextjs/server';
 import { clerkClient } from '@clerk/nextjs/server';
 import { fetchAthleteById } from '../../../utils/airtable';
 
@@ -7,13 +7,17 @@ const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_PA
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTABLE_BASE;
 const AIRTABLE_TABLE_NAME = 'Athletes';
 
-export default requireSession(async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'PUT') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { userId } = req.auth;
+    const { userId } = await getAuth(req);
+    
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
     const { id } = req.query;
     const updateData = req.body;
 

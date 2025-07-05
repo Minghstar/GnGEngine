@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { requireSession } from '@clerk/nextjs/api';
+import { getAuth } from '@clerk/nextjs/server';
 import { clerkClient } from '@clerk/nextjs/server';
 
-export default requireSession(async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-  const { userId } = req.auth;
+  
+  const { userId } = await getAuth(req);
+  
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   const { role } = req.body;
   if (!role || !['athlete', 'follower'].includes(role)) {
     return res.status(400).json({ error: 'Invalid role' });
