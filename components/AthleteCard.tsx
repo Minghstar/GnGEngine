@@ -190,12 +190,19 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           )}
         </div>
         
-        <div className="mt-auto pt-2">
+        <div className="mt-auto pt-2 space-y-2">
           <Link href={`/profile/${athlete.id}`} legacyBehavior>
             <a>
               <Button variant="primary" className="w-full">View Profile</Button>
             </a>
           </Link>
+          {!athlete.isVerified && (
+            <Link href={`/claim-profile?search=${encodeURIComponent(athlete.name)}`} legacyBehavior>
+              <a>
+                <Button variant="secondary" className="w-full text-sm">Claim This Profile</Button>
+              </a>
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>
