@@ -64,7 +64,27 @@ const Navbar = () => {
               transition={{ delay: 0.6 }}
             >
               <SignedOut>
-                <SignInButton mode="modal">
+                <SignInButton 
+                  mode="modal"
+                  appearance={{
+                    variables: {
+                      colorPrimary: "#007F3E", // GNG green
+                      colorText: "#000000",
+                      colorTextOnPrimaryBackground: "#ffffff",
+                      borderRadius: "12px",
+                      colorAccent: "#FFD700", // Gold for tags or highlights
+                      fontFamily: "Inter, sans-serif"
+                    },
+                    elements: {
+                      card: "shadow-2xl border border-gray-200 bg-white",
+                      headerTitle: "text-xl font-semibold text-primary",
+                      formFieldInput: "rounded-md focus:ring-2 ring-accent",
+                      socialButtonsBlockButton: "hover:scale-[1.02] transition-all",
+                      footerAction: "text-sm text-gray-500",
+                      formButtonPrimary: "bg-primary text-white hover:bg-primary/90 rounded-md"
+                    }
+                  }}
+                >
                   <Button variant="primary">Sign In</Button>
                 </SignInButton>
               </SignedOut>
@@ -128,7 +148,27 @@ const Navbar = () => {
                 transition={{ delay: 0.6 }}
               >
                 <SignedOut>
-                  <SignInButton mode="modal">
+                  <SignInButton 
+                    mode="modal"
+                    appearance={{
+                      variables: {
+                        colorPrimary: "#007F3E", // GNG green
+                        colorText: "#000000",
+                        colorTextOnPrimaryBackground: "#ffffff",
+                        borderRadius: "12px",
+                        colorAccent: "#FFD700", // Gold for tags or highlights
+                        fontFamily: "Inter, sans-serif"
+                      },
+                      elements: {
+                        card: "shadow-2xl border border-gray-200 bg-white",
+                        headerTitle: "text-xl font-semibold text-primary",
+                        formFieldInput: "rounded-md focus:ring-2 ring-accent",
+                        socialButtonsBlockButton: "hover:scale-[1.02] transition-all",
+                        footerAction: "text-sm text-gray-500",
+                        formButtonPrimary: "bg-primary text-white hover:bg-primary/90 rounded-md"
+                      }
+                    }}
+                  >
                     <Button variant="primary" className="w-full">Sign In</Button>
                   </SignInButton>
                 </SignedOut>
