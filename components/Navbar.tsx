@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import Button from './Button';
-import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -21,12 +20,11 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
             <div className="mr-3">
-              <Image
+              <img
                 src="/logo-gng-engine.png"
                 alt="GNG Engine Logo"
                 width={40}
                 height={40}
-                priority
                 className="rounded-lg bg-white/10"
               />
             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Twitter } from 'lucide-react';
 import NewsletterSignup from './NewsletterSignup';
-import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -19,7 +18,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left border-t border-neutral-gray pt-8">
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-2 text-neutral-gray text-sm font-body">
             <div className="mb-2 md:mb-0">
-              <Image
+              <img
                 src="/logo-gng-engine.png"
                 alt="GNG Engine Logo"
                 width={40}
