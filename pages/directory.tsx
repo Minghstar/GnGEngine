@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GetStaticProps } from 'next';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import Layout from '../components/Layout';
 import FilterBar, { FilterState } from '../components/FilterBar';
 import SearchBar from '../components/SearchBar';
