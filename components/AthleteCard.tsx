@@ -31,7 +31,7 @@ function getFlagEmoji(nationality: string) {
 
 const AthleteCard = ({ athlete }: AthleteCardProps) => {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true, threshold: 0.1 });
+  const isInView = useInView(ref, { once: true });
   
   // Conditional rendering logic - don't render if missing critical data
   if (!athlete.name && !athlete.image) {

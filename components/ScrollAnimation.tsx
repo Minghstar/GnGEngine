@@ -8,7 +8,6 @@ interface ScrollAnimationProps {
   duration?: number;
   y?: number;
   triggerOnce?: boolean;
-  threshold?: number;
 }
 
 const ScrollAnimation: React.FC<ScrollAnimationProps> = ({ 
@@ -17,13 +16,11 @@ const ScrollAnimation: React.FC<ScrollAnimationProps> = ({
   delay = 0, 
   duration = 0.5, 
   y = 30,
-  triggerOnce = true,
-  threshold = 0.1
+  triggerOnce = true
 }) => {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { 
-    once: triggerOnce,
-    threshold: threshold
+    once: triggerOnce
   });
 
   return (
