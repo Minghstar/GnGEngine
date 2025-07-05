@@ -3,6 +3,7 @@ import { Athlete } from '../utils/airtable';
 import Input from './Input';
 import Select from './Select';
 import Button from './Button';
+import SportIcons from './SportIcons';
 
 interface FilterBarProps {
   athletes: Athlete[];
@@ -75,7 +76,9 @@ const FilterBar = ({ athletes, onFilterChange }: FilterBarProps) => {
             >
               <option value="">All Sports</option>
               {uniqueValues.sports.map(sport => (
-                <option key={sport} value={sport}>{sport}</option>
+                <option key={sport} value={sport}>
+                  {sport}
+                </option>
               ))}
             </Select>
           </div>

@@ -2,6 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import AthleteCard from '../../components/AthleteCard';
+import SportIcons from '../../components/SportIcons';
 import { fetchAthletes, Athlete } from '../../utils/airtable';
 
 interface SportPageProps {
@@ -50,9 +51,14 @@ export default function SportPage({ athletes, sportName, sportStats }: SportPage
             </svg>
             Back to Results
           </button>
-          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4 font-heading">
-            {sportName} Athletes
-          </h1>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="bg-gradient-to-br from-primary-red to-accent-blue rounded-full p-3">
+              <SportIcons sport={sportName} size={32} className="text-white" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-charcoal font-heading">
+              {sportName} Athletes
+            </h1>
+          </div>
           <p className="text-lg md:text-xl text-text-secondary max-w-3xl mx-auto font-body">
             Discover Australian {sportName.toLowerCase()} athletes competing at the collegiate level.
           </p>

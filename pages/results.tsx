@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import Layout from '../components/Layout';
+import SportIcons from '../components/SportIcons';
 import { fetchAthletes, Athlete } from '../utils/airtable';
 
 interface SportCard {
@@ -152,7 +153,12 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
                 <div className={`bg-gradient-to-br ${sportCard.color} rounded-2xl p-8 text-white h-full flex flex-col justify-between`}>
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-2xl font-bold font-heading">{sportCard.name}</h3>
+                      <div className="flex items-center gap-3">
+                        <div className="bg-white/20 rounded-full p-2">
+                          <SportIcons sport={sportCard.name} size={24} className="text-white" />
+                        </div>
+                        <h3 className="text-2xl font-bold font-heading">{sportCard.name}</h3>
+                      </div>
                       <div className="bg-white/20 rounded-full px-3 py-1 text-sm font-semibold">
                         {sportCard.athleteCount} athletes
                       </div>
