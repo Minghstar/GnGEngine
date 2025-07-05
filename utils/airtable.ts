@@ -37,13 +37,32 @@ const airtableApi = axios.create({
 
 export const fetchAthletes = async (): Promise<Athlete[]> => {
   try {
-    const response = await airtableApi.get(`/${AIRTABLE_TABLE_NAME}`);
+    let allRecords: any[] = [];
+    let offset: string | undefined = undefined;
     
-    if (!response.data.records) {
-      return [];
-    }
+    // Fetch all records using pagination
+    do {
+      const params: any = {};
+      if (offset) {
+        params.offset = offset;
+      }
+      
+      const response = await airtableApi.get(`/${AIRTABLE_TABLE_NAME}`, { params });
+      
+      if (!response.data.records) {
+        break;
+      }
+      
+      allRecords = allRecords.concat(response.data.records);
+      offset = response.data.offset;
+      
+      console.log(`📊 Fetched ${allRecords.length} athletes so far...`);
+      
+    } while (offset);
+    
+    console.log(`✅ Total athletes fetched: ${allRecords.length}`);
 
-    return response.data.records.map((record: any) => {
+    return allRecords.map((record: any) => {
       const college = record.fields.College || 'Unknown';
       return {
         id: record.id,
