@@ -17,7 +17,7 @@ export default function Home({ athletes }: HomeProps) {
   const stats = [
     { label: 'Athletes', value: '850+' },
     { label: 'Colleges Tracked', value: '53' },
-    { label: 'Sports Covered', value: '2' },
+    { label: 'Sports Covered', value: '10+' },
   ];
 
   const features = [
