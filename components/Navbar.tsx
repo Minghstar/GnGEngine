@@ -21,7 +21,7 @@ const Navbar = () => {
           <Link href="/" className="flex-shrink-0 flex items-center">
             <div className="mr-3">
               <img
-                src="/logo-gng-engine.png"
+                src="/logo-test.svg"
                 alt="GNG Engine Logo"
                 width={40}
                 height={40}

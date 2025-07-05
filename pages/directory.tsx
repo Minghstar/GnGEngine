@@ -15,6 +15,7 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
   const [filteredAthletes, setFilteredAthletes] = useState<Athlete[]>(initialAthletes);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshError, setRefreshError] = useState<string | null>(null);
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
@@ -60,12 +61,36 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
 
   const refreshData = async () => {
     setLoading(true);
+    setRefreshError(null);
     try {
       const freshAthletes = await fetchAthletes();
+      
+      if (freshAthletes.length === 0) {
+        setRefreshError('No athletes found. Please check your connection and try again.');
+        return;
+      }
+      
       setAthletes(freshAthletes);
-      setFilteredAthletes(freshAthletes);
+      
+      // Preserve current filter state by re-applying filters to fresh data
+      let filtered = freshAthletes;
+      
+      // Apply search filter
+      if (searchQuery) {
+        const search = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+          athlete =>
+            athlete.name.toLowerCase().includes(search) ||
+            athlete.college.toLowerCase().includes(search) ||
+            athlete.hometown.toLowerCase().includes(search)
+        );
+      }
+      
+      setFilteredAthletes(filtered);
     } catch (error) {
       console.error('Error refreshing athletes:', error);
+      setRefreshError('Failed to refresh data. Please try again.');
+      // If refresh fails, keep the current data
     } finally {
       setLoading(false);
     }
@@ -96,8 +121,13 @@ export default function Directory({ athletes: initialAthletes }: DirectoryProps)
         {/* Filter Bar */}
         <FilterBar athletes={athletes} onFilterChange={handleFilterChange} />
 
-        {/* Refresh Button */}
-        <div className="flex justify-end mb-6">
+        {/* Refresh Button and Error Display */}
+        <div className="flex justify-between items-center mb-6">
+          {refreshError && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded font-body">
+              {refreshError}
+            </div>
+          )}
           <button
             onClick={refreshData}
             disabled={loading}
