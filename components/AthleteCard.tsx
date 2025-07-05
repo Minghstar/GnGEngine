@@ -161,7 +161,7 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
