@@ -134,9 +134,6 @@ const Navbar = () => {
       <SignedIn>
         <SignOutButton />
       </SignedIn>
-      {isSignedIn && user?.publicMetadata?.role === 'athlete' && (
-        // Show edit/profile buttons here
-      )}
     </nav>
   );
 };
