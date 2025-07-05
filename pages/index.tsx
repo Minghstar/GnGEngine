@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 import HeroSection from '../components/HeroSection';
 import StatsBar from '../components/StatsBar';
@@ -35,15 +36,37 @@ export default function Home({ athletes }: HomeProps) {
         onPrimaryClick={() => window.location.href = '/directory'}
         onSecondaryClick={() => window.location.href = '/results'}
       />
-      <div className="max-w-5xl mx-auto w-full px-4">
+      <motion.div 
+        className="max-w-5xl mx-auto w-full px-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
         <StatsBar stats={stats} />
-      </div>
+      </motion.div>
       <RecentlyAddedAthletes athletes={athletes} />
-      <HowItWorksSection />
-      <div className="max-w-5xl mx-auto w-full px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
+        <HowItWorksSection />
+      </motion.div>
+      <motion.div 
+        className="max-w-5xl mx-auto w-full px-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
         <FeatureSection features={features} />
-      </div>
-      <FinalCTASection />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+      >
+        <FinalCTASection />
+      </motion.div>
     </Layout>
   );
 }

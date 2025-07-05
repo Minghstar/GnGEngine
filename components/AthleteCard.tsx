@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Athlete } from '../utils/airtable';
 import { 
   validateAthlete, 
@@ -56,7 +57,13 @@ const AthleteCard = ({ athlete }: AthleteCardProps) => {
   const showLowResBadge = shouldShowLowResBadge(athlete.image);
   
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-gray-200">
+    <motion.div 
+      className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col border border-gray-200"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      whileHover={{ y: -5 }}
+    >
       {/* Image Section - Fixed aspect ratio with max dimensions */}
       <div className="relative w-full h-64 bg-background max-w-[250px] max-h-[250px] mx-auto">
         {athlete.image ? (

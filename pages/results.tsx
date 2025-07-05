@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GetStaticProps } from 'next';
+import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 import SportIcons from '../components/SportIcons';
 import { fetchAthletes, Athlete } from '../utils/airtable';
@@ -102,35 +103,65 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <h1 className="text-4xl md:text-5xl font-bold text-text mb-4 font-heading">
             Sports Results
           </h1>
-          <div className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"></div>
+          <motion.div 
+            className="border-t-4 border-accent w-20 mx-auto mt-4 mb-6"
+            initial={{ width: 0 }}
+            animate={{ width: "5rem" }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          ></motion.div>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-body">
             Explore Australian college athletes by sport. Click on any sport to view detailed results and statistics.
           </p>
-        </div>
+        </motion.div>
 
         {/* Stats Summary */}
-        <div className="bg-white rounded-xl p-6 mb-8 text-center shadow-md border-l-4 border-accent">
+        <motion.div 
+          className="bg-white rounded-xl p-6 mb-8 text-center shadow-md border-l-4 border-accent"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group">
+            <motion.div 
+              className="group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+            >
               <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{sportCards.length}</div>
               <div className="text-gray-600 font-body">Sports Covered</div>
-            </div>
-            <div className="group">
+            </motion.div>
+            <motion.div 
+              className="group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+            >
               <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">{athletes.length}</div>
               <div className="text-gray-600 font-body">Total Athletes</div>
-            </div>
-            <div className="group">
+            </motion.div>
+            <motion.div 
+              className="group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.0 }}
+            >
               <div className="text-3xl font-bold text-primary font-heading group-hover:text-accent transition-colors duration-200">
                 {Math.round(athletes.length / sportCards.length)}
               </div>
               <div className="text-gray-600 font-body">Avg. Athletes per Sport</div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Sport Cards Grid */}
         {loading ? (
@@ -145,11 +176,15 @@ export default function Results({ athletes: initialAthletes }: ResultsProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sportCards.map((sportCard) => (
-              <div
+            {sportCards.map((sportCard, index) => (
+              <motion.div
                 key={sportCard.id}
                 onClick={() => handleSportClick(sportCard)}
                 className="group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
+                whileHover={{ y: -5 }}
               >
                 <div className={`bg-gradient-to-br ${sportCard.color} rounded-2xl p-8 text-white h-full flex flex-col justify-between`}>
                   <div>
