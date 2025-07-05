@@ -1,59 +1,140 @@
-import { useRouter } from 'next/router';
-import { useUser, useAuth } from '@clerk/nextjs';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useUser } from '@clerk/nextjs';
+import { motion } from 'framer-motion';
+import Layout from '../components/Layout';
 
-export default function SelectRolePage() {
+export default function SelectRole() {
+  const [selectedRole, setSelectedRole] = useState<'athlete' | 'follower' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { user } = useUser();
-  const { getToken } = useAuth();
-  const [loading, setLoading] = useState(false);
 
-  const handleSelect = async (role: 'athlete' | 'follower') => {
-    if (!user) return;
-    setLoading(true);
+  // If user already has a role, redirect them
+  if (user?.publicMetadata?.role) {
+    if (user.publicMetadata.role === 'athlete') {
+      router.push('/claim-profile');
+    } else {
+      router.push('/results');
+    }
+    return null;
+  }
+
+  const handleRoleSelect = async (role: 'athlete' | 'follower') => {
+    setSelectedRole(role);
+    setIsLoading(true);
+
     try {
-      const token = await getToken();
-      await fetch('/api/set-role', {
+      const response = await fetch('/api/set-role', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ role })
+        body: JSON.stringify({ role }),
       });
-      if (role === 'athlete') {
-        router.push('/claim');
+
+      if (response.ok) {
+        // Redirect based on role
+        if (role === 'athlete') {
+          router.push('/claim-profile');
+        } else {
+          router.push('/results');
+        }
       } else {
-        router.push('/results');
+        console.error('Failed to set role');
+        setIsLoading(false);
       }
-    } catch (e) {
-      alert('Failed to set role.');
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error('Error setting role:', error);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary to-accent">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-6 text-center">Select Your Role</h1>
-        <div className="space-y-4">
-          <button
-            className="w-full py-3 rounded-lg bg-accent text-white font-semibold text-lg hover:bg-accent/90 transition"
-            onClick={() => handleSelect('athlete')}
-            disabled={loading}
-          >
-            👤 Athlete — I'm a current or future college athlete
-          </button>
-          <button
-            className="w-full py-3 rounded-lg bg-primary text-white font-semibold text-lg hover:bg-primary/90 transition"
-            onClick={() => handleSelect('follower')}
-            disabled={loading}
-          >
-            👀 Follower — I just want to explore and follow athletes
-          </button>
-        </div>
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary to-secondary flex items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md w-full"
+        >
+          <div className="bg-white rounded-2xl shadow-2xl p-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-center mb-8"
+            >
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Welcome to GNG Engine
+              </h1>
+              <p className="text-gray-600">
+                Choose how you'd like to use the platform
+              </p>
+            </motion.div>
+
+            <div className="space-y-4">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleRoleSelect('athlete')}
+                disabled={isLoading}
+                className={`w-full p-6 rounded-xl border-2 transition-all duration-200 ${
+                  selectedRole === 'athlete'
+                    ? 'border-accent bg-accent/10'
+                    : 'border-gray-200 hover:border-accent/50'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <div className="text-left">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    🏃‍♂️ I'm an Athlete
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Claim your profile, update your information, and showcase your achievements
+                  </p>
+                </div>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleRoleSelect('follower')}
+                disabled={isLoading}
+                className={`w-full p-6 rounded-xl border-2 transition-all duration-200 ${
+                  selectedRole === 'follower'
+                    ? 'border-accent bg-accent/10'
+                    : 'border-gray-200 hover:border-accent/50'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <div className="text-left">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    👀 I'm a Follower
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Discover athletes, follow their progress, and stay updated on college sports
+                  </p>
+                </div>
+              </motion.button>
+            </div>
+
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-6 text-center"
+              >
+                <div className="inline-flex items-center text-accent">
+                  <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Setting up your experience...
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </Layout>
   );
 } 

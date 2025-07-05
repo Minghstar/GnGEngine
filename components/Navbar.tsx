@@ -4,19 +4,31 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import { SignedIn, SignedOut, SignInButton, SignOutButton, useUser } from '@clerk/nextjs';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/directory', label: 'Directory' },
-  { href: '/results', label: 'Results' },
-  { href: '/claim-profile', label: 'Claim Profile' },
-  { href: '/for-scouts', label: 'For Scouts' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-];
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isSignedIn, user } = useUser();
+
+  // Role-based navigation
+  const getNavLinks = () => {
+    const baseLinks = [
+      { href: '/', label: 'Home' },
+      { href: '/directory', label: 'Directory' },
+      { href: '/results', label: 'Results' },
+      { href: '/about', label: 'About' },
+      { href: '/contact', label: 'Contact' },
+    ];
+
+    if (isSignedIn && user?.publicMetadata?.role === 'athlete') {
+      return [
+        ...baseLinks,
+        { href: '/claim-profile', label: 'Claim Profile' },
+      ];
+    }
+
+    return baseLinks;
+  };
+
+  const navLinks = getNavLinks();
 
   return (
     <nav className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -89,9 +101,24 @@ const Navbar = () => {
                 </SignInButton>
               </SignedOut>
               <SignedIn>
-                <SignOutButton>
-                  <Button variant="secondary">Sign Out</Button>
-                </SignOutButton>
+                <div className="relative group">
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-primary px-3 py-2 rounded-md text-base font-body font-medium transition-colors duration-200">
+                    <span>{user?.firstName || 'User'}</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div className="px-4 py-2 text-sm text-gray-500 border-b">
+                      {user?.publicMetadata?.role === 'athlete' ? 'Athlete' : 'Follower'}
+                    </div>
+                    <SignOutButton>
+                      <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Sign Out
+                      </button>
+                    </SignOutButton>
+                  </div>
+                </div>
               </SignedIn>
             </motion.div>
           </div>
@@ -173,9 +200,16 @@ const Navbar = () => {
                   </SignInButton>
                 </SignedOut>
                 <SignedIn>
-                  <SignOutButton>
-                    <Button variant="secondary" className="w-full">Sign Out</Button>
-                  </SignOutButton>
+                  <div className="border-t pt-4 mt-4">
+                    <div className="px-3 py-2 text-sm text-gray-500">
+                      {user?.publicMetadata?.role === 'athlete' ? 'Athlete' : 'Follower'}
+                    </div>
+                    <SignOutButton>
+                      <button className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                        Sign Out
+                      </button>
+                    </SignOutButton>
+                  </div>
                 </SignedIn>
               </motion.div>
             </div>

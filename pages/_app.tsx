@@ -10,16 +10,36 @@ import type { AppProps } from 'next/app';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider, useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
 
-export default function App({ Component, pageProps }: AppProps) {
+function AppContent({ Component, pageProps }: any) {
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
-  
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      // Check if user has selected a role
+      const hasRole = user.publicMetadata?.role;
+      
+      if (!hasRole && router.pathname !== '/select-role') {
+        // New user without role - redirect to role selection
+        router.push('/select-role');
+      }
+    }
+  }, [isLoaded, isSignedIn, user, router]);
+
+  return (
+    <AnimatePresence mode="wait">
+      <Component key={router.route} {...pageProps} />
+    </AnimatePresence>
+  );
+}
+
+export default function App({ Component, pageProps }: any) {
   return (
     <ClerkProvider>
-      <AnimatePresence mode="wait">
-        <Component key={router.route} {...pageProps} />
-      </AnimatePresence>
+      <AppContent Component={Component} pageProps={pageProps} />
     </ClerkProvider>
   );
 } 

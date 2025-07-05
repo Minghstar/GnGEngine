@@ -6,6 +6,7 @@ import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import Layout from '../../../components/Layout';
 import Button from '../../../components/Button';
+import ProtectedRoute from '../../../components/ProtectedRoute';
 import { fetchAthleteById, Athlete } from '../../../utils/airtable';
 import { 
   getDisplayName, 
@@ -73,6 +74,7 @@ export default function EditProfile({ athlete }: EditProfileProps) {
           </div>
         </div>
       </Layout>
+    </ProtectedRoute>
     );
   }
 
@@ -110,11 +112,12 @@ export default function EditProfile({ athlete }: EditProfileProps) {
   };
 
   return (
-    <Layout 
-      title={`Edit ${getDisplayName(athlete.name)} - GNG Engine`}
-      description={`Edit profile information for ${getDisplayName(athlete.name)}`}
-    >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <ProtectedRoute requiredRole="athlete">
+      <Layout 
+        title={`Edit ${getDisplayName(athlete.name)} - GNG Engine`}
+        description={`Edit profile information for ${getDisplayName(athlete.name)}`}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="mb-8">
           <Button 
