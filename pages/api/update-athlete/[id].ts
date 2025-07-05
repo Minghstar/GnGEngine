@@ -77,4 +77,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Error updating athlete:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-}); 
+}
